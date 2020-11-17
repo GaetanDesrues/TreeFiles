@@ -4,14 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="packageName",
-    version="0.1.000",
-    author="Author Name",
-    author_email="Author Mail",
+    name="treefiles",
+    version="0.1.003",
+    author="Gaetan Desrues",
+    author_email="gdesrues@gmail.com",
     description="Description",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="Git link",
+    url="https://github.com/GaetanDesrues/TreeFiles",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

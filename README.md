@@ -1,1 +1,1 @@
-# README: package documentation
+# README: TreeFiles documentation
