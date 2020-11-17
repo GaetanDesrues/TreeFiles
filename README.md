@@ -2,6 +2,8 @@
 
 ### A sympathic way of dealing with filenames
 
+Documentation: [here](https://www-sop.inria.fr/members/Gaetan.Desrues/treefiles/).
+
 ```python
 >>> dir = Tree(curDirs(__file__, "foo"))
 >>> dir.file("test1.txt", ca="test2.vtk")
