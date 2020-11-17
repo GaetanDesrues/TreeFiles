@@ -2,7 +2,7 @@
 
 ### A sympathic way of dealing with filenames
 
-```bash
+```python
 >>> dir = Tree(curDirs(__file__, "foo"))
 >>> dir.file("test1.txt", ca="test2.vtk")
 
