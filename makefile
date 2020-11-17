@@ -7,8 +7,8 @@ py :
 	python3 -m twine upload  dist/*
 
 git :
-	git commit -am 'ok'
+	git commit -am 'update treefile package'
 	git push origin master
 
 pip :
-	python3 -m pip install --upgrade --user packageName
+	python3 -m pip install --upgrade --user treefiles

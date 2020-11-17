@@ -24,9 +24,9 @@ sys.path.insert(0, os.path.abspath('./../..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'packageName'
-copyright = '2020, Author Name'
-author = 'Author Name'
+project = 'TreeFiles'
+copyright = '2020, Gaetan Desrues'
+author = 'Gaetan Desrues'
 
 
 # -- General configuration ---------------------------------------------------
@@ -53,8 +53,8 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-import sphinx_theme
-html_theme_path = [sphinx_theme.get_html_theme_path()]
+# import sphinx_theme
+# html_theme_path = [sphinx_theme.get_html_theme_path()]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

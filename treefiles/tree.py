@@ -3,12 +3,13 @@ import shutil
 
 
 class Tree:
+    """
+    Creates a tree instance
+
+    :param name: root of the current tree
+    :param parent: parent tree if current tree is not the main root
+    """
     def __init__(self, name="root", parent=None):
-        """
-        Creates a tree instance
-        :param name: root of the current tree
-        :param parent: parent tree if current tree is not the main root
-        """
         self.parent = parent
         self.name = name
         self.dirs = []
@@ -17,6 +18,7 @@ class Tree:
     def abs(self, path=""):
         """
         Returns the absolute path of a tree root
+
         :param path: recursion parameter
         """
         if self.parent is None:
@@ -26,6 +28,7 @@ class Tree:
     def __getattr__(self, att):
         """
         Find an attribute
+
         :param att: the attribute name
 
         The order of preferences is:
@@ -48,6 +51,7 @@ class Tree:
     def __repr__(self, i=2):
         """
         Pretty prints th current tree
+
         :param i: recursion parameter
         """
         s = f"{self.name}\n"
@@ -60,6 +64,7 @@ class Tree:
     def dir(self, *names):
         """
         Adds directories to the current level
+
         :param names: folder names
         :return: instance of the last child created
         """
@@ -70,6 +75,7 @@ class Tree:
     def file(self, *args, **kwargs):
         """
         Saves a filename at the current tree level
+
         :param args: filenames, attributes are the files basename
         :param kwargs: filenames, attributes are the kwargs key
         """
@@ -82,6 +88,7 @@ class Tree:
     def path(self, *args) -> str:
         """
         Creates a path starting from parent
+
         :param args: paths to join
         :return: the joined absolute path
         """
@@ -90,6 +97,7 @@ class Tree:
     def dump(self, clean=False):
         """
         Create tree as root (create folder and children)
+
         :param clean: remove root before recreating it if exists
         :return: root instance
         """
@@ -104,7 +112,6 @@ class Tree:
     def remove_empty(self):
         """
         Deletes empty children
-        :return:
         """
         for d in self.dirs:
             d.remove_empty()
