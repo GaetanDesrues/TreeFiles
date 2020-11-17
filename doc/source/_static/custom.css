@@ -1,0 +1,16 @@
+/* This file intentionally left blank. */
+
+
+table, thead * {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+cite{
+  background-color: lightgrey;
+  text-decoration: none;
+  font-style : normal;
+  padding: .2em;
+  color: black;
+}
