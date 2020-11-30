@@ -1,53 +1,18 @@
 TreeFiles's package documentation
 =====================================
 
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
+   :maxdepth: 5
+
+   install
+   tree
+   commons
+
 
 .. role:: python(code)
   :language: python
-
-
-Install
-========
-
-Requirements
-------------
-
-- See `the requirements <https://github.com/GaetanDesrues/TreeFiles/blob/master/requirements.txt>`_.
-- Create a conda venv
-
-    .. code:: bash
-
-        conda create --name <env> --file requirements.txt
-
-Using pip
-------------
-
-.. code:: bash
-
-  pip install treefiles
-  # or python3 -m pip install --user treefiles
-
-From sources
-------------
-
-.. code:: bash
-
-  git clone https://github.com/GaetanDesrues/TreeFiles.git
-  pip install -e treefiles
-
-
-Tree
-========
-
-.. autoclass:: treefiles.Tree
-  :members:
-  :special-members:
-  :member-order: bysource
-  :exclude-members: __init__, __weakref__
-
 
 
 .. Indices and tables
