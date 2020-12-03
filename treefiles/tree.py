@@ -9,9 +9,14 @@ class Tree:
     :param name: root of the current tree
     :param parent: parent tree if current tree is not the main root
     """
-    def __init__(self, name="root", parent=None):
+    def __init__(self, name=None, parent=None):
+        if name is not None:
+            if isinstance(name, Tree):
+                name = name.abs()
+        else:
+            name = "root"
         self.parent = parent
-        self.name = name
+        self._name = name
         self.dirs = []
         self.files = dict()
 
@@ -22,8 +27,19 @@ class Tree:
         :param path: recursion parameter
         """
         if self.parent is None:
-            return os.path.abspath(self.name)
-        return os.path.join(self.parent.abs(path), self.name)
+            return os.path.abspath(self._name)
+        return os.path.join(self.parent.abs(path), self._name)
+
+    @property
+    def root(self):
+        return self._name
+
+    @root.setter
+    def root(self, x):
+        if isinstance(x, Tree):
+            self._name = x.abs()
+        else:
+            self._name = x
 
     def __getattr__(self, att):
         """
@@ -39,14 +55,14 @@ class Tree:
         if att in self.files:
             return os.path.join(self.abs(), self.files[att])
         for d in self.dirs:
-            if d.name == att:
+            if d._name == att:
                 return d
         for d in self.dirs:
             found = getattr(d, att)
             if found is not None:
                 return found
         if self.parent is None:
-            raise AttributeError(f"Attribute {att} was not find in {self.name}")
+            raise AttributeError(f"Attribute {att!r} not found in {self._name}")
 
     def __repr__(self, i=2):
         """
@@ -54,7 +70,7 @@ class Tree:
 
         :param i: recursion parameter
         """
-        s = f"{self.name}\n"
+        s = f"{self._name}\n"
         for d in self.dirs:
             s += f"{' '*i}\u2514 {d.__repr__(i+2)}\n"
         for f in self.files.values():
