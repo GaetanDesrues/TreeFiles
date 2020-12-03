@@ -1,5 +1,6 @@
-from .tree import Tree
-from .commons import (
+from treefiles.tree import Tree
+from treefiles.decorators import debug, timer
+from treefiles.commons import (
     join,
     isfile,
     basename,
