@@ -9,6 +9,7 @@ TreeFiles's package documentation
    install
    tree
    commons
+   pdf
 
 
 .. role:: python(code)
