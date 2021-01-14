@@ -130,3 +130,15 @@ def link(in_fname, out_dir):
     removeIfExists(quick_link)
     os.symlink(in_fname, quick_link)
     return quick_link
+
+
+def dump_txt(fname, data, delimiter=" "):
+    with open(fname, "w") as f:
+        for line in data:
+            f.write(str(delimiter).join(map(str, line)) + "\n")
+
+
+def load_txt(fname, delimiter=" "):
+    with open(fname, "r") as f:
+        data = f.read().split("\n")[:-1]
+    return list(map(lambda x: x.split(delimiter), data))
