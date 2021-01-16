@@ -10,6 +10,8 @@ from treefiles.commons import (
     dump_yaml,
     load_json,
     dump_json,
+    load_txt,
+    dump_txt,
     pprint_json,
     curDir,
     curDirs,
