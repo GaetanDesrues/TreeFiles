@@ -140,5 +140,7 @@ def dump_txt(fname, data, delimiter=" "):
 
 def load_txt(fname, delimiter=" "):
     with open(fname, "r") as f:
-        data = f.read().split("\n")[:-1]
-    return list(map(lambda x: x.split(delimiter), data))
+        data = f.read().split("\n")
+    while data[-1] == "":
+        data = data[:-1]
+    return list(map(lambda x: x.rstrip().split(delimiter), data))
