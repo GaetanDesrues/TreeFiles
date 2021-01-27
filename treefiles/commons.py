@@ -144,3 +144,10 @@ def load_txt(fname, delimiter=" "):
     while data[-1] == "":
         data = data[:-1]
     return list(map(lambda x: x.rstrip().split(delimiter), data))
+
+
+def find_new_dir(temp, start=0):
+    """ Return new directory name indexed as the first `start` index available in `temp` formattable path """
+    while isdir(temp.format(start)):
+        start += 1
+    return temp.format(start)

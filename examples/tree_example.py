@@ -1,14 +1,21 @@
+from os.path import isdir
+
 from treefiles import Tree, curDirs
 
 
-def main():
-    dir = Tree(curDirs(__file__, "foo"))
-    dir.file("test1.txt", ca="test2.vtk")
-    second = dir.dir("bar", "second")
-    second.file("Hello_second.txt")
-    dir.bar.file("Hello_bar.txt")
+def find_new_dir(temp, start=0):
+    while isdir(temp.format(start)):
+        start += 1
+    return temp.format(start)
 
-    print(dir)
+def main():
+    dir = Tree(curDirs(__file__, "foo")).dump()
+    # dir.file("test1.txt", ca="test2.vtk")
+    # second = dir.dir("bar", "second")
+    # second.file("Hello_second.txt")
+    # dir.bar.file("Hello_bar.txt")
+
+    # print(dir)
     # <path-to-examples>/foo
     #     └ bar
     #         └ Hello_bar.txt
@@ -19,6 +26,11 @@ def main():
 
     # dir.dump()
     # dir.remove_empty()
+
+    kk = find_new_dir(dir.path("test_{}"))
+    Tree(kk).dump()
+    print(kk)
+
 
 
 if __name__=="__main__":
