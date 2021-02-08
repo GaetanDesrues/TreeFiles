@@ -1,6 +1,6 @@
 from os.path import isdir
 
-from treefiles import Tree, curDirs
+from treefiles import Tree, curDirs, timer
 
 
 def find_new_dir(temp, start=0):
@@ -8,6 +8,7 @@ def find_new_dir(temp, start=0):
         start += 1
     return temp.format(start)
 
+@timer
 def main():
     dir = Tree(curDirs(__file__, "foo")).dump()
     # dir.file("test1.txt", ca="test2.vtk")
