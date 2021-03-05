@@ -15,6 +15,7 @@ try:
     YAML = True
 except:
     YAML = False
+# `pip install PyYAML` to install yaml
 
 
 def isDir(path):
@@ -24,7 +25,7 @@ def isDir(path):
     return isdir(path)
 
 
-def load_yaml(fname):
+def load_yaml(fname, **kwargs):
     """ Loads a yaml file with `yaml.load`
 
     :return: dict
@@ -34,10 +35,11 @@ def load_yaml(fname):
     if not isfile(fname):
         logging.critical(f"{fname!r} has not been found")
     with open(fname, "r") as f:
-        return yaml.load(f, Loader=Loader)
+        kwargs.update({"Loader": kwargs.get("Loader", Loader)})
+        return yaml.load(f, **kwargs)
 
 
-def dump_yaml(fname, data):
+def dump_yaml(fname, data, **kwargs):
     """ Dumps a dict to a yaml file with `yaml.dump`
 
     :param data: dict
@@ -45,7 +47,8 @@ def dump_yaml(fname, data):
     if not YAML:
         logging.error("You must install yaml")
     with open(fname, "w") as f:
-        f.write(yaml.dump(data, Dumper=Dumper))
+        kwargs.update({"Dumper": kwargs.get("Dumper", Dumper)})
+        f.write(yaml.dump(data, **kwargs))
 
 
 def load_json(filename, **kwargs):

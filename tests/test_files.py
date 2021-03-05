@@ -1,5 +1,5 @@
 import unittest
-from treefiles import Tree, curDirs, isDir, join, dump_json, isfile
+from treefiles import Tree, curDirs, isDir, join, dump_json, isfile, dump_yaml, load_yaml
 import shutil
 
 
@@ -18,12 +18,17 @@ class TestFiles(unittest.TestCase):
 
     def test_commons(self):
         _dir = self.dir.dump(clean=True)
-        _dir.file("test3.json")
+        _dir.file("test3.json", "test_yaml.yaml")
 
         data = {"test": True}
         dump_json(_dir.test3, data)
 
         self.assertTrue(isfile(_dir.test3))
+
+        dump_yaml(_dir.test_yaml, data)
+        self.assertTrue(isfile(_dir.test_yaml))
+        d = load_yaml(_dir.test_yaml)
+        self.assertEqual(d, data)
 
     def test_rm(self):
         shutil.rmtree(self.dir.abs())
