@@ -20,6 +20,11 @@ class Tree:
         self.dirs = []
         self.files = dict()
 
+    @classmethod
+    def new(cls, file, *args):
+        file = os.path.dirname(os.path.abspath(file))
+        return cls(os.path.join(file, *args)).dump()
+
     def abs(self, path=""):
         """
         Returns the absolute path of a tree root
