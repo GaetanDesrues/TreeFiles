@@ -156,5 +156,5 @@ def find_new_dir(temp, start=0):
     return temp.format(start)
 
 
-def greedy_download(fname, force_download):
-    return os.path.isfile(fname) or force_download
+def greedy_download(fname, force):
+    return not os.path.isfile(fname) or force
