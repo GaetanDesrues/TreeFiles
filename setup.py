@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="treefiles",
-    version="0.1.017",
+    version="0.1.018",
     author="Gaetan Desrues",
     author_email="gdesrues@gmail.com",
     description="Description",
