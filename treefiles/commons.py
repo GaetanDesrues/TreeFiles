@@ -154,3 +154,7 @@ def find_new_dir(temp, start=0):
     while isdir(temp.format(start)):
         start += 1
     return temp.format(start)
+
+
+def greedy_download(fname, force_download):
+    return os.path.isfile(fname) or force_download
