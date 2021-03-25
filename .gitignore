@@ -5,3 +5,4 @@ increaseVersionSetup.py
 makefile
 __pycache__/
 .idea/
+venv

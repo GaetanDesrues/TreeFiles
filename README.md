@@ -1,26 +1,29 @@
 # TreeFiles
 
-### A sympathic way of dealing with filenames
+### A sympathic way of dealing with filenames, and more...
 
 Documentation: [here](https://www-sop.inria.fr/members/Gaetan.Desrues/treefiles/).
 
 ```python
->>> dir = Tree(curDirs(__file__, "foo"))
->>> dir.file("test1.txt", ca="test2.vtk")
+import treefiles as tf
 
->>> bar = dir.dir("bar")
->>> bar.file("Hello_bar.txt")
+dir = tf.Tree.new(__file__, "foo")
+dir.file("test1.txt", ca="test2.vtk")
 
->>> print(dir)
-<path-to-directory>/foo
-    └ bar
-        └ Hello_bar.txt
-    └ test1.txt
-    └ test2.vtk
+bar = dir.dir("bar")
+bar.file("Hello_bar.txt")
+
+print(dir)
+# Output:
+# <path-to-directory>/foo
+#     └ bar
+#         └ Hello_bar.txt
+#     └ test1.txt
+#     └ test2.vtk
 ```
 
 
 ```python
->>> dir.dump()  # Create tree
->>> dir.remove_empty()  # Clean tree from empty dirs
+dir.dump()  # Create directory with os.makedirs
+dir.remove_empty()  # Delete empty directories
 ```
