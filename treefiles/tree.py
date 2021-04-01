@@ -9,6 +9,7 @@ class Tree:
     :param name: root of the current tree
     :param parent: parent tree if current tree is not the main root
     """
+
     def __init__(self, name=None, parent=None):
         if name is not None:
             if isinstance(name, Tree):
@@ -90,7 +91,7 @@ class Tree:
         :return: instance of the last child created
         """
         for name in names:
-            self.dirs.append(Tree(name, parent=self))
+            self.dirs.append(type(self)(name, parent=self))
         return self.dirs[-1]
 
     def file(self, *args, **kwargs):
@@ -139,3 +140,25 @@ class Tree:
 
         if os.path.isdir(self.abs()) and len(os.listdir(self.abs())) == 0:
             os.rmdir(self.abs())
+
+    def __getstate__(self):
+        """
+        Pickles an object.
+
+        Because of recursion on __getstate__, only the absolute path is saved when pickling for the moment.
+        You can override this method if it does not meet your needs, PR are welcomed.
+        """
+
+        # if self.parent is not None:
+        #     d.update({"parent": self.parent.__getstate__()})
+        # d.update({"dirs": [x.__getstate__() for x in self.dirs]})
+
+        return {"_name": self.abs()}
+
+    def __setstate__(self, state):
+        """
+        Unpickles an object.
+        """
+        self.__dict__.update(
+            {"_name": state.get("_name"), "parent": None, "dirs": [], "files": {}}
+        )
