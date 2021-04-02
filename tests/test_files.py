@@ -1,6 +1,7 @@
 import pickle
 import shutil
 import unittest
+from datetime import time
 
 import treefiles as tf
 
@@ -40,6 +41,12 @@ class TestFiles(unittest.TestCase):
         my_dir = pickle.loads(d)
         self.assertIs(type(my_dir), tf.Tree)
         self.assertEqual(self.my_dir.abs(), my_dir.abs())
+
+    def test_oar(self):
+        res = tf.start_oar(runme_str="runme.sh",)
+        _res = "oarsub --resource /host=1/core=4,walltime=00:10:00 -J --queue default runme.sh"
+        self.assertIs(type(res), str)
+        self.assertEqual(res, _res)
 
 
 if __name__ == "__main__":

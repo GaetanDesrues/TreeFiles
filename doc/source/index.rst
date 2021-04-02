@@ -10,6 +10,7 @@ TreeFiles's package documentation
    tree
    commons
    logs
+   oar
    simple_plot
    pdf
 
