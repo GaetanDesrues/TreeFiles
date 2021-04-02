@@ -13,6 +13,13 @@ Requirements
 
         conda create --name <env> --file requirements.txt
 
+- Or legacy venv:
+
+    .. code:: bash
+
+         python -m venv <path-to-env>
+         pip install -r requirements.txt
+
 Using pip
 ------------
 

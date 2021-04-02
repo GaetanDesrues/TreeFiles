@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import os
 import shutil
+from typing import TypeVar
 
 
 class Tree:
@@ -10,7 +13,7 @@ class Tree:
     :param parent: parent tree if current tree is not the main root
     """
 
-    def __init__(self, name=None, parent=None):
+    def __init__(self, name: str = None, parent: T = None):
         if name is not None:
             if isinstance(name, Tree):
                 name = name.abs()
@@ -22,11 +25,11 @@ class Tree:
         self.files = dict()
 
     @classmethod
-    def new(cls, file, *args):
+    def new(cls, file: str, *args: str) -> T:
         file = os.path.dirname(os.path.abspath(file))
         return cls(os.path.join(file, *args)).dump()
 
-    def abs(self, path=""):
+    def abs(self, path="") -> str:
         """
         Returns the absolute path of a tree root
 
@@ -37,19 +40,19 @@ class Tree:
         return os.path.join(self.parent.abs(path), self._name)
 
     @property
-    def root(self):
+    def root(self) -> str:
         return self._name
 
     @root.setter
-    def root(self, x):
+    def root(self, x: [T, str]):
         if isinstance(x, Tree):
             self._name = x.abs()
         else:
             self._name = x
 
-    def __getattr__(self, att):
+    def __getattr__(self, att) -> [str, T]:
         """
-        Find an attribute
+        Finds an attribute
 
         :param att: the attribute name
 
@@ -83,7 +86,7 @@ class Tree:
             s += f"{' '*i}\u2514 {f}\n"
         return s.rstrip()
 
-    def dir(self, *names):
+    def dir(self, *names: str) -> T:
         """
         Adds directories to the current level
 
@@ -94,7 +97,7 @@ class Tree:
             self.dirs.append(type(self)(name, parent=self))
         return self.dirs[-1]
 
-    def file(self, *args, **kwargs):
+    def file(self, *args: str, **kwargs: str):
         """
         Saves a filename at the current tree level
 
@@ -107,7 +110,7 @@ class Tree:
         for k, v in kwargs.items():
             self.files[k] = v
 
-    def path(self, *args) -> str:
+    def path(self, *args: str) -> str:
         """
         Creates a path starting from parent
 
@@ -116,7 +119,7 @@ class Tree:
         """
         return os.path.join(self.abs(), *args)
 
-    def dump(self, clean=False):
+    def dump(self, clean: bool = False) -> T:
         """
         Create tree as root (create folder and children)
 
@@ -162,3 +165,6 @@ class Tree:
         self.__dict__.update(
             {"_name": state.get("_name"), "parent": None, "dirs": [], "files": {}}
         )
+
+
+T = TypeVar("T", bound=Tree)

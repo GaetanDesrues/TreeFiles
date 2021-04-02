@@ -9,6 +9,8 @@ TreeFiles's package documentation
    install
    tree
    commons
+   logs
+   simple_plot
    pdf
 
 

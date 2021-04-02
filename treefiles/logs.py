@@ -37,6 +37,17 @@ def set_up_logger(logger, remove_handlers=True):
 
 
 def get_logger():
+    """
+    Format the root logger to remove default handlers and add a `StreamHandler` with custom formatter `SimpleFormatter`.
+
+    Usage example, place this in your main module
+
+    .. code:: python
+
+        logging.basicConfig(level=logging.INFO)
+        log = get_logger()
+
+    """
     log = logging.getLogger()
     set_up_logger(log)
     return log
