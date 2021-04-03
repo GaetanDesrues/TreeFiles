@@ -1,10 +1,12 @@
+import glob
+import json
+import logging
 import os
 import shutil
 from os.path import join, isfile, basename, isdir
-import json
-import glob
-import logging
-from .tree import Tree
+from typing import TypeVar, List
+
+from treefiles.tree import Tree
 
 try:
     try:
@@ -18,14 +20,17 @@ except:
 # `pip install PyYAML` to install yaml
 
 
-def isDir(path):
+T = TypeVar("T", bound=Tree)
+
+
+def isDir(path: [str, T]):
     """ Wrapper of `os.path.isdir` """
     if isinstance(path, Tree):
         return isdir(path.abs())
     return isdir(path)
 
 
-def load_yaml(fname, **kwargs):
+def load_yaml(fname: str, **kwargs):
     """ Loads a yaml file with `yaml.load`
 
     :return: dict
@@ -39,7 +44,7 @@ def load_yaml(fname, **kwargs):
         return yaml.load(f, **kwargs)
 
 
-def dump_yaml(fname, data, **kwargs):
+def dump_yaml(fname: str, data, **kwargs):
     """ Dumps a dict to a yaml file with `yaml.dump`
 
     :param data: dict
@@ -51,7 +56,7 @@ def dump_yaml(fname, data, **kwargs):
         f.write(yaml.dump(data, **kwargs))
 
 
-def load_json(filename, **kwargs):
+def load_json(filename: str, **kwargs):
     """ Loads a json file with `json.load`
 
     :return: dict
@@ -60,7 +65,7 @@ def load_json(filename, **kwargs):
         return json.load(f, **kwargs)
 
 
-def dump_json(filename, data, **kwargs):
+def dump_json(filename: str, data, **kwargs):
     """ Dumps a dict to a json file with `json.dump`
 
     :param data: dict
@@ -70,42 +75,42 @@ def dump_json(filename, data, **kwargs):
         json.dump(data, f, **kwargs)
 
 
-def pprint_json(data):
+def pprint_json(data: dict):
     """ Returns a pretty printed dict """
     return json.dumps(data, indent=4)
 
 
-def curDir(file=None):
+def curDir(file: str = None):
     """ Absolute path of current directory """
     return os.getcwd() if file is None else os.path.dirname(os.path.abspath(file))
 
 
-def curDirs(file, *paths):
+def curDirs(file: str, *paths: List[str]):
     """ Absolute path of current directory joined with `*paths` """
     return join(curDir(file), *paths)
 
 
-def removeIfExists(fname):
+def removeIfExists(fname: str):
     """ Remove `fname` if it exists """
     if os.path.exists(fname):
         os.remove(fname)
 
 
-def remove(*args):
+def remove(*args: List[str]):
     """ Remove files in globs `*args` if they exist """
     for t in args:
         for f in glob.glob(t):
             removeIfExists(f)
 
 
-def move(arg, dest):
+def move(arg: str, dest: str):
     """ Move files in glob `arg` to `dest` with `shutil.move` """
     for f in glob.glob(arg):
         removeIfExists(join(dest, os.path.basename(f)))
         shutil.move(f, dest)
 
 
-def copyfile(arg, dest):
+def copyfile(arg: str, dest: str):
     """ Copy a file in glob `arg` to `dest` with `shutil.copyfile`
 
     `dest` is a directory path, later joined with args' basenames
@@ -114,7 +119,7 @@ def copyfile(arg, dest):
         shutil.copyfile(f, join(dest, os.path.basename(f)))
 
 
-def copyFile(src, dst):
+def copyFile(src: str, dst: str):
     """ Copy a file `src` to `dst` with `shutil.copyfile`
 
     dst is a file, the file path of the copied file
@@ -122,7 +127,7 @@ def copyFile(src, dst):
     shutil.copyfile(src, dst)
 
 
-def link(in_fname, out_dir):
+def link(in_fname: str, out_dir: T):
     """
     Will create a sym link from `in_fname` to the directory out_dir
     :param in_fname str: Filename of the file
@@ -135,13 +140,13 @@ def link(in_fname, out_dir):
     return quick_link
 
 
-def dump_txt(fname, data, delimiter=" "):
+def dump_txt(fname: str, data, delimiter=" "):
     with open(fname, "w") as f:
         for line in data:
             f.write(str(delimiter).join(map(str, line)) + "\n")
 
 
-def load_txt(fname, delimiter=" "):
+def load_txt(fname: str, delimiter=" "):
     with open(fname, "r") as f:
         data = f.read().split("\n")
     while data[-1] == "":
@@ -149,12 +154,12 @@ def load_txt(fname, delimiter=" "):
     return list(map(lambda x: x.rstrip().split(delimiter), data))
 
 
-def find_new_dir(temp, start=0):
+def find_new_dir(temp: str, start=0):
     """ Return new directory name indexed as the first `start` index available in `temp` formattable path """
     while isdir(temp.format(start)):
         start += 1
     return temp.format(start)
 
 
-def greedy_download(fname, force):
+def greedy_download(fname: str, force: bool):
     return not os.path.isfile(fname) or force

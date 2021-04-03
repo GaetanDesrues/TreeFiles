@@ -10,8 +10,8 @@ class TestFiles(unittest.TestCase):
     my_dir = tf.Tree(tf.curDirs(__file__, "foo"))
 
     def test_dir(self):
-        self.my_dir.dump()
-        self.assertTrue(tf.isDir(self.my_dir))
+        self.my_dir.dir("test").dump()
+        self.assertTrue(tf.isDir(self.my_dir.test))
 
     def test_files(self):
         _dir = self.my_dir.dump()

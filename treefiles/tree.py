@@ -13,7 +13,7 @@ class Tree:
     :param parent: parent tree if current tree is not the main root
     """
 
-    def __init__(self, name: str = None, parent: T = None):
+    def __init__(self, name: [str, T] = None, parent: T = None):
         if name is not None:
             if isinstance(name, Tree):
                 name = name.abs()
