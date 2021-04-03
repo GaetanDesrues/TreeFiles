@@ -4,7 +4,7 @@ import logging
 import os
 import shutil
 from os.path import join, isfile, basename, isdir
-from typing import TypeVar, List
+from typing import TypeVar
 
 from treefiles.tree import Tree
 
@@ -85,7 +85,7 @@ def curDir(file: str = None):
     return os.getcwd() if file is None else os.path.dirname(os.path.abspath(file))
 
 
-def curDirs(file: str, *paths: List[str]):
+def curDirs(file: str, *paths: str):
     """ Absolute path of current directory joined with `*paths` """
     return join(curDir(file), *paths)
 
@@ -96,7 +96,7 @@ def removeIfExists(fname: str):
         os.remove(fname)
 
 
-def remove(*args: List[str]):
+def remove(*args: str):
     """ Remove files in globs `*args` if they exist """
     for t in args:
         for f in glob.glob(t):
