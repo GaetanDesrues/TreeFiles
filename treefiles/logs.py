@@ -27,7 +27,7 @@ class SimpleFormatter(logging.Formatter):
 
 
 class CSVFormatter(logging.Formatter):
-    def __init__(self, formats=None, sep=",", **kw):
+    def __init__(self, formats=None, sep=", ", **kw):
         super().__init__(**kw)
 
         if formats is None:
@@ -73,9 +73,9 @@ def get_logger(
     return logger
 
 
-def stream_csv_handler():
+def stream_csv_handler(**kwargs):
     h = logging.StreamHandler(sys.stdout)
-    h.setFormatter(CSVFormatter(sep=", "))
+    h.setFormatter(CSVFormatter(**kwargs))
     return h
 
 
