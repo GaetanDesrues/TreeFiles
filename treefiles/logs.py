@@ -1,5 +1,6 @@
 import logging
 import sys
+from typing import List
 
 
 class SimpleFormatter(logging.Formatter):
@@ -25,20 +26,26 @@ class SimpleFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def set_up_logger(logger, remove_handlers=True):
-    if remove_handlers:
-        for hdlr in logger.handlers:
-            logger.removeHandler(hdlr)
+class CSVFormatter(logging.Formatter):
+    def __init__(self, formats=None, sep=",", **kw):
+        super().__init__(**kw)
 
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(SimpleFormatter())
+        if formats is None:
+            formats = ["asctime", "levelname", "funcName", "message"]
 
-    logger.addHandler(console_handler)
+        fmt = [f"%({x})s" for x in formats]
+        self.fmt = sep.join(fmt)
+
+    def format(self, record):
+        formatter = logging.Formatter(self.fmt, datefmt="%Y-%m-%d %H:%M:%S")
+        return formatter.format(record)
 
 
-def get_logger():
+def get_logger(
+    remove_handlers=True, default=True, handlers: List[logging.Handler] = None
+):
     """
-    Format the root logger to remove default handlers and add a `StreamHandler` with custom formatter `SimpleFormatter`.
+    Format the root logger to remove default handlers and add a default `StreamHandler` with custom formatter `SimpleFormatter`.
 
     Usage example, place this in your main module
 
@@ -48,16 +55,35 @@ def get_logger():
         log = get_logger()
 
     """
-    log = logging.getLogger()
-    set_up_logger(log)
-    return log
+    logger = logging.getLogger()
+
+    if remove_handlers:
+        for hdlr in logger.handlers:
+            logger.removeHandler(hdlr)
+
+    if default:
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(SimpleFormatter())
+        logger.addHandler(console_handler)
+
+    if handlers is not None:
+        for x in handlers:
+            logger.addHandler(x)
+
+    return logger
+
+
+def stream_csv_handler():
+    h = logging.StreamHandler(sys.stdout)
+    h.setFormatter(CSVFormatter(sep=", "))
+    return h
 
 
 if __name__ == "__main__":
 
     def my_func():
         logging.basicConfig(level=logging.INFO)
-        log = get_logger()
+        log = get_logger(default=False, handlers=[stream_csv_handler()])
 
         log.debug("This is a debug message")
         log.info("This is an info message")

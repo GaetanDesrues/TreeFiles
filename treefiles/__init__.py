@@ -2,7 +2,7 @@ from treefiles.tree import Tree
 from treefiles.decorators import debug, timer
 from treefiles.pdf import PDFMerger
 from treefiles.splot import SimplePlot as SPlot
-from treefiles.logs import get_logger
+from treefiles.logs import get_logger, stream_csv_handler
 from treefiles.oar import start_oar
 from treefiles.commons import (
     join,

@@ -36,7 +36,7 @@ def load_yaml(fname: str, **kwargs):
     :return: dict
     """
     if not YAML:
-        logging.error("You must install yaml")
+        logging.error("You must install yaml: `pip install PyYAML`")
     if not isfile(fname):
         logging.critical(f"{fname!r} has not been found")
     with open(fname, "r") as f:
