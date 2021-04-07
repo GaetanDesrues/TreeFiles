@@ -1,16 +1,23 @@
 import logging
 import subprocess
-from datetime import time
+from datetime import timedelta
 from typing import List
 
 import treefiles as tf
+
+
+def walltime(hours=0, minutes=0):
+    s = timedelta(hours=hours, minutes=minutes)
+    h, m = s.seconds // 3600, s.seconds // 60 % 60
+    h += 24 * s.days
+    return f"{str(h).zfill(2)}:{str(m).zfill(2)}:00"
 
 
 def start_oar(
     runme_str,
     oardir: [tf.Tree, str] = None,
     array_fname: str = None,
-    walltime: [time, str] = time(minute=10),
+    wall_time: str = walltime(minutes=10),
     host: int = 1,
     core: int = 4,
     job_name: str = None,
@@ -42,7 +49,7 @@ def start_oar(
     :param runme_str: path to the runme script or command line
     :param oardir: directory for std out/err
     :param array_fname: path to the arguments file (array file)
-    :param walltime: wall time of the job
+    :param wall_time: wall time of the job
     :param host: numbre of nodes
     :param core: number of cores
     :param job_name: job name
@@ -52,8 +59,6 @@ def start_oar(
     :param do_run: whether to execute the command or not
     :return: The output of the oar command if `do_run` is True else the oar command
     """
-    walltime = str(walltime)
-
     cmd = ["oarsub"]
 
     if job_name is not None:
@@ -62,7 +67,7 @@ def start_oar(
     cmd.extend(
         [
             "--resource",
-            f"/host={host}/core={core},walltime={walltime}",
+            f"/host={host}/core={core},walltime={wall_time}",
             "-J",
             "--queue",
             f"{queue}",
