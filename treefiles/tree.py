@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import glob
 import os
 import shutil
-from typing import TypeVar
+from typing import TypeVar, List
 
 
 class Tree:
@@ -173,6 +174,23 @@ class Tree:
         self.__dict__.update(
             {"_name": state.get("_name"), "parent": None, "dirs": [], "files": {}}
         )
+
+    def glob(self, pattern: str) -> List[str]:
+        """
+        Return a list of paths matching a pathname pattern, see <glob.glob>
+        """
+        from treefiles.commons import natural_sort
+
+        return natural_sort(glob.glob(self.path(pattern)))
+
+    @property
+    def ls(self):
+        """
+        Returns a sorted list of the folder contents
+        """
+        from treefiles.commons import listdir
+
+        return listdir(self)
 
 
 T = TypeVar("T", bound=Tree)

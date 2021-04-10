@@ -166,16 +166,16 @@ def greedy_download(fname: str, force: bool):
     return not os.path.isfile(fname) or force
 
 
-def natural_sort(l: List) -> List:
+def natural_sort(l: List[str]) -> List[str]:
     """
-    Sorts a list in a natural way
+    Sorts a list of paths in a natural way
     """
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [convert(c) for c in re.split("(\d+)", key)]
     return sorted(l, key=alphanum_key)
 
 
-def listdir(root: [T, str]) -> List:
+def listdir(root: [T, str]) -> List[str]:
     """
     Returns a list of files and folders in directory
     """
