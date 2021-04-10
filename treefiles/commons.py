@@ -2,9 +2,10 @@ import glob
 import json
 import logging
 import os
+import re
 import shutil
 from os.path import join, isfile, basename, isdir
-from typing import TypeVar
+from typing import TypeVar, List
 
 from treefiles.tree import Tree
 
@@ -163,3 +164,24 @@ def find_new_dir(temp: str, start=0):
 
 def greedy_download(fname: str, force: bool):
     return not os.path.isfile(fname) or force
+
+
+def natural_sort(l: List) -> List:
+    """
+    Sorts a list in a natural way
+    """
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split("(\d+)", key)]
+    return sorted(l, key=alphanum_key)
+
+
+def listdir(root: [T, str]) -> List:
+    """
+    Returns a list of files and folders in directory
+    """
+    if isinstance(root, str):
+        root = Tree(root)
+
+    l = os.listdir(root.abs())
+    l = natural_sort(l)
+    return list(map(root.path, l))
