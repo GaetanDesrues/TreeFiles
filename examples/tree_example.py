@@ -1,23 +1,15 @@
-from os.path import isdir
-
 import treefiles as tf
-
-
-def find_new_dir(temp, start=0):
-    while isdir(temp.format(start)):
-        start += 1
-    return temp.format(start)
 
 
 @tf.timer
 def main():
-    dir = tf.Tree.new(__file__, "foo")
-    dir.file("test1.txt", ca="test2.vtk")
-    second = dir.dir("bar", "second")
+    root = tf.Tree.new(__file__, "foo")
+    root.file("test1.txt", ca="test2.vtk")
+    second = root.dir("bar", "second")
     second.file("Hello_second.txt")
-    dir.bar.file("Hello_bar.txt")
+    root.bar.file("Hello_bar.txt")
 
-    print(dir)
+    print(root)
     # <path-to-examples>/foo
     #     └ bar
     #         └ Hello_bar.txt
@@ -26,12 +18,11 @@ def main():
     #     └ test1.txt
     #     └ test2.vtk
 
-    dir.dump()
-    dir.remove_empty()
+    print(root.p)
+    # <path-to-examples>/hello.txt
 
-    kk = find_new_dir(dir.path("test_{}"))
-    tf.Tree(kk).dump()
-    print(kk)
+    # dir.dump()
+    # dir.remove_empty()
 
 
 if __name__ == "__main__":

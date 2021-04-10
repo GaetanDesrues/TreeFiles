@@ -1,7 +1,6 @@
 import pickle
 import shutil
 import unittest
-from datetime import time
 
 import treefiles as tf
 
@@ -48,6 +47,10 @@ class TestFiles(unittest.TestCase):
         self.assertIs(type(res), str)
         self.assertEqual(res, _res)
 
+    def test_tree_parent_dir(self):
+        _dir = tf.Tree.new(__file__, "foo")
+        self.assertIsInstance(_dir.p, tf.Tree)
+        self.assertEqual(_dir.p.abs(), tf.curDir(__file__))
 
 if __name__ == "__main__":
     unittest.main()

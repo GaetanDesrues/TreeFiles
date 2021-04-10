@@ -50,6 +50,14 @@ class Tree:
         else:
             self._name = x
 
+    @property
+    def p(self) -> T:
+        """
+        Returns the parent directory (path only)
+        """
+        dirs = self.abs().split(os.sep)
+        return type(self)(os.sep.join(dirs[:-1]))
+
     def __getattr__(self, att) -> [str, T]:
         """
         Finds an attribute

@@ -1,13 +1,13 @@
+import datetime
 import logging
 import subprocess
-from datetime import timedelta
 from typing import List
 
 import treefiles as tf
 
 
-def walltime(hours=0, minutes=0):
-    s = timedelta(hours=hours, minutes=minutes)
+def walltime(hours: int = 0, minutes: int = 0):
+    s = datetime.timedelta(hours=hours, minutes=minutes)
     h, m = s.seconds // 3600, s.seconds // 60 % 60
     h += 24 * s.days
     return f"{str(h).zfill(2)}:{str(m).zfill(2)}:00"
