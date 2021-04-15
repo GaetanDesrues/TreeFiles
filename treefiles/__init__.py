@@ -4,7 +4,7 @@ from treefiles.pdf import PDFMerger
 from treefiles.splot import SimplePlot as SPlot
 from treefiles.logs import get_logger, stream_csv_handler
 from treefiles.oar import start_oar, walltime
-from temp import TmpDir
+from treefiles.temp import TmpDir
 from treefiles.commons import (
     join,
     isfile,

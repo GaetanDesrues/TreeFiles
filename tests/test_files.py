@@ -52,5 +52,13 @@ class TestFiles(unittest.TestCase):
         self.assertIsInstance(_dir.p, tf.Tree)
         self.assertEqual(_dir.p.abs(), tf.curDir(__file__))
 
+    def test_temp_dir(self):
+        root = tf.curDir(__file__)
+        with tf.TmpDir(root) as tmp:
+            self.assertTrue(tf.isDir(tmp.abs()))
+            fname = tmp.abs()
+        self.assertFalse(tf.isDir(fname))
+
+
 if __name__ == "__main__":
     unittest.main()
