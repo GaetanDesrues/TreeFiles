@@ -34,7 +34,7 @@ class PvPlot(pv.Plotter):
 
     def add_meshes(self, meshes):
         for x in meshes:
-            if isinstance(x, tuple) or isinstance(x, list):
+            if isinstance(x, (tuple, list)):
                 self.add_mesh(x[0], **x[1])
             else:
                 self.add_mesh(x)
