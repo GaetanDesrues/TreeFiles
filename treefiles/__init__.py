@@ -6,6 +6,7 @@ from treefiles.logs import get_logger, stream_csv_handler
 from treefiles.oar import start_oar, walltime
 from treefiles.temp import TmpDir
 from treefiles.pyvista_plot import PvPlot
+from treefiles.tables import Table
 from treefiles.commons import (
     join,
     isfile,
