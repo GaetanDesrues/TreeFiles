@@ -1,12 +1,9 @@
 import logging
 
-import treefiles as tf
+import pyvista as pv
+from MeshObject import Object
 
-try:
-    import pyvista as pv
-    from MeshObject import Object
-except ImportError:
-    pass
+import treefiles as tf
 
 
 class PvPlot(pv.Plotter):
@@ -71,6 +68,6 @@ if __name__ == "__main__":
     m2 = m.copy()
     m2.transform(translate=[2, 0, 0])
 
-    with PvPlot(off_screen=True) as plotter:
+    with PvPlot() as plotter:  # off_screen=True
         plotter.add_meshes([[m2, {"show_edges": True}], m])
-        plotter.save(tf.curDirs(__file__, "plot.png"))
+        # plotter.save(tf.curDirs(__file__, "plot.png"))

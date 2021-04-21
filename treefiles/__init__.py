@@ -5,7 +5,15 @@ from treefiles.splot import SimplePlot as SPlot
 from treefiles.logs import get_logger, stream_csv_handler
 from treefiles.oar import start_oar, walltime
 from treefiles.temp import TmpDir
-from treefiles.pyvista_plot import PvPlot
+
+try:
+    import pyvista as pv
+    from MeshObject import Object
+except ImportError:
+    pass
+else:
+    from treefiles.pyvista_plot import PvPlot
+
 from treefiles.tables import Table
 from treefiles.commons import (
     join,
