@@ -43,6 +43,9 @@ class TmpFile:
         return self.find_new() if tf.isfile(new_name) else new_name
 
     def __enter__(self):
+        return self.enter()
+
+    def enter(self):
         new_name = self.find_new()
         if self.suffix is not None:
             new_name += self.suffix
@@ -51,6 +54,9 @@ class TmpFile:
         return self.f
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        self.exit()
+
+    def exit(self):
         self.f.close()
         tf.removeIfExists(self.fname)
 
