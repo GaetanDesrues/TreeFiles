@@ -33,7 +33,7 @@ class TmpDir:
 
 
 class TmpFile:
-    def __init__(self, mode="w", suffix=None):
+    def __init__(self, mode="w+", suffix=None):
         self.mode = mode
         self.suffix = suffix
         self.fname = None
