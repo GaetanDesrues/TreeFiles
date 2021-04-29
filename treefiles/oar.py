@@ -13,6 +13,44 @@ def walltime(hours: int = 0, minutes: int = 0):
     return f"{str(h).zfill(2)}:{str(m).zfill(2)}:00"
 
 
+class NotifyOar:
+    WAITING = "WAITING"
+    LAUNCHED = "LAUNCHED"
+    RUNNING = "RUNNING"
+    END = "END"
+    ERROR = "ERROR"
+    INFO = "INFO"
+    SUSPENDED = "SUSPENDED"
+    RESUMING = "RESUMING"
+    FINISHING = "FINISHING"
+    TERMINATED = "TERMINATED"
+    end = [END, TERMINATED, ERROR, FINISHING]
+
+    def __init__(self, dest: str, tags: [str, List] = None):
+        self.dest = dest
+        if tags is None:
+            tags = NotifyOar.end
+        elif isinstance(tags, str):
+            tags = [] if tags == "all" else [tags]
+        self.tags = tags
+
+    @property
+    def exec(self):
+        self.dest = tf.Tree(self.dest).abs()
+        return self.build_cmd("exec")
+
+    @property
+    def mail(self):
+        return self.build_cmd("mail")
+
+    def build_cmd(self, dtype: str):
+        assert dtype in ["mail", "exec"]
+        tags = ",".join(self.tags)
+        if tags != "":
+            tags = f"[{tags}]"
+        return ["--notify", f"{tags}{dtype}:{self.dest}"]
+
+
 def start_oar(
     runme_str,
     oardir: [tf.Tree, str] = None,
@@ -25,6 +63,8 @@ def start_oar(
     cmd_fname: str = None,
     runme_args: List[str] = None,
     do_run: bool = False,
+    with_json: bool = False,
+    notify: List = None,
 ) -> str:
     """
     Builds an oar command.
@@ -57,6 +97,8 @@ def start_oar(
     :param cmd_fname: path to a file to save the oar command
     :param runme_args: list of command line arguments given to the runme script
     :param do_run: whether to execute the command or not
+    :param with_json: add the -J option in oarsub command
+    :param notify: notify options [List], you may use the class NotifyOar to build this option
     :return: The output of the oar command if `do_run` is True else the oar command
     """
     cmd = ["oarsub"]
@@ -68,13 +110,13 @@ def start_oar(
         [
             "--resource",
             f"/host={host}/core={core},walltime={wall_time}",
-            "-J",
             "--queue",
             f"{queue}",
-            # "--directory",
-            # sdir.abs(),
         ]
     )
+
+    if with_json:
+        cmd.append("-J")
 
     if oardir is not None:
         if isinstance(oardir, str):
@@ -88,6 +130,9 @@ def start_oar(
                 oardir.path(f"{jn}.%jobid%.stderr"),
             ]
         )
+
+    if notify is not None:
+        cmd.extend(notify)
 
     oarcmd = [runme_str]
     if runme_args is not None:
