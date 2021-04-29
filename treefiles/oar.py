@@ -13,6 +13,11 @@ def walltime(hours: int = 0, minutes: int = 0):
     return f"{str(h).zfill(2)}:{str(m).zfill(2)}:00"
 
 
+class Queue:
+    DEFAULT = "default"
+    BESTEFFORT = "besteffort"
+
+
 class NotifyOar:
     WAITING = "WAITING"
     LAUNCHED = "LAUNCHED"
@@ -36,7 +41,7 @@ class NotifyOar:
 
     @property
     def exec(self):
-        self.dest = tf.Tree(self.dest).abs()
+        # self.dest = tf.Tree(self.dest).abs()
         return self.build_cmd("exec")
 
     @property
@@ -48,21 +53,21 @@ class NotifyOar:
         tags = ",".join(self.tags)
         if tags != "":
             tags = f"[{tags}]"
-        return ["--notify", f"{tags}{dtype}:{self.dest}"]
+        return ["--notify", f'"{tags}{dtype}:{self.dest}"']
 
 
 def start_oar(
     runme_str,
-    oardir: [tf.Tree, str] = None,
+    logs_dir: [tf.Tree, str] = None,
     array_fname: str = None,
-    wall_time: str = walltime(minutes=10),
+    wall_time: str = walltime(minutes=1),
     host: int = 1,
-    core: int = 4,
+    core: int = 1,
     job_name: str = None,
-    queue: str = "default",
+    queue: str = Queue.DEFAULT,
     cmd_fname: str = None,
     runme_args: List[str] = None,
-    do_run: bool = False,
+    do_run: bool = True,
     with_json: bool = False,
     notify: List = None,
 ) -> str:
@@ -78,7 +83,7 @@ def start_oar(
 
             res = start_oar(
                 runme_str=cdir.path("runme.sh"),
-                oardir=sdir,
+                logs_dir=sdir,
                 walltime=time(minute=10),
                 queue="besteffort",
                 core=2,
@@ -87,7 +92,7 @@ def start_oar(
             )
 
     :param runme_str: path to the runme script or command line
-    :param oardir: directory for std out/err
+    :param logs_dir: directory for std out/err
     :param array_fname: path to the arguments file (array file)
     :param wall_time: wall time of the job
     :param host: numbre of nodes
@@ -118,16 +123,16 @@ def start_oar(
     if with_json:
         cmd.append("-J")
 
-    if oardir is not None:
-        if isinstance(oardir, str):
-            oardir = tf.Tree(oardir)
+    if logs_dir is not None:
+        if isinstance(logs_dir, str):
+            logs_dir = tf.Tree(logs_dir)
         jn = "OAR" if job_name is None else job_name
         cmd.extend(
             [
                 "--stdout",
-                oardir.path(f"{jn}.%jobid%.stdout"),
+                logs_dir.path(f"{jn}.%jobid%.stdout"),
                 "--stderr",
-                oardir.path(f"{jn}.%jobid%.stderr"),
+                logs_dir.path(f"{jn}.%jobid%.stderr"),
             ]
         )
 
