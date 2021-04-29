@@ -1,7 +1,7 @@
 import datetime
 import logging
 import subprocess
-from typing import List
+from typing import List, Union
 
 import treefiles as tf
 
@@ -70,7 +70,7 @@ def start_oar(
     do_run: bool = True,
     with_json: bool = False,
     notify: List = None,
-) -> str:
+) -> Union[str, List[str]]:
     """
     Builds an oar command.
 
@@ -157,7 +157,7 @@ def start_oar(
         shell_output = subprocess.check_output(cmd)
         return shell_output.decode("utf-8")
     else:
-        return " ".join(cmd)
+        return cmd
 
 
 log = logging.getLogger(__name__)
