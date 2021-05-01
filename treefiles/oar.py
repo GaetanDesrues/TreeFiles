@@ -161,10 +161,11 @@ def start_oar(
         cmd.insert(2, array_fname)
 
     if stdout is not None:
-        cmd.extend([">", stdout, "2>"])
+        cmd.extend([">", stdout])
         if stderr is None:
-            stderr = "&1"
-        cmd.append(stderr)
+            cmd.append("2>&1")
+        else:
+            cmd.extend(["2>", stderr])
 
     if cmd_fname is not None:
         tf.dump_txt(cmd_fname, [cmd])
