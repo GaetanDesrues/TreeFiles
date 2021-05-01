@@ -76,6 +76,8 @@ def start_oar(
     with_json: bool = False,
     notify: List = None,
     prgm: str = Program.OARSUB,
+    stdout: str = None,
+    stderr: str = None,
 ) -> Union[str, List[str]]:
     """
     Builds an oar command.
@@ -111,6 +113,8 @@ def start_oar(
     :param with_json: add the -J option in oarsub command
     :param notify: notify options [List], you may use the class NotifyOar to build this option
     :param prgm: `oarsub` or `oarctl sub`
+    :param stdout: path for stdout
+    :param stderr: path for stderr, defaults to stdout if None
     :return: The output of the oar command if `do_run` is True else the oar command
     """
     cmd = [prgm]
@@ -155,6 +159,12 @@ def start_oar(
     if array_fname is not None:
         cmd.insert(1, "--array-param-file")
         cmd.insert(2, array_fname)
+
+    if stdout is not None:
+        cmd.extend([">", stdout, "2>"])
+        if stderr is None:
+            stderr = "&1"
+        cmd.append(stderr)
 
     if cmd_fname is not None:
         tf.dump_txt(cmd_fname, [cmd])
