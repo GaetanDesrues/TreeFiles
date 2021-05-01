@@ -18,18 +18,23 @@ class Queue:
     BESTEFFORT = "besteffort"
 
 
+class Program:
+    OARSUB = "oarsub"
+    OARCTL = "oarctl sub"
+
+
 class NotifyOar:
-    WAITING = "WAITING"
-    LAUNCHED = "LAUNCHED"
     RUNNING = "RUNNING"
     END = "END"
     ERROR = "ERROR"
     INFO = "INFO"
     SUSPENDED = "SUSPENDED"
     RESUMING = "RESUMING"
-    FINISHING = "FINISHING"
-    TERMINATED = "TERMINATED"
-    end = [END, TERMINATED, ERROR, FINISHING]
+    # WAITING = "WAITING"
+    # LAUNCHED = "LAUNCHED"
+    # FINISHING = "FINISHING"
+    # TERMINATED = "TERMINATED"
+    end = [END, ERROR]
 
     def __init__(self, dest: str, tags: [str, List] = None):
         self.dest = dest
@@ -70,6 +75,7 @@ def start_oar(
     do_run: bool = True,
     with_json: bool = False,
     notify: List = None,
+    prgm: str = Program.OARSUB,
 ) -> Union[str, List[str]]:
     """
     Builds an oar command.
@@ -104,9 +110,10 @@ def start_oar(
     :param do_run: whether to execute the command or not
     :param with_json: add the -J option in oarsub command
     :param notify: notify options [List], you may use the class NotifyOar to build this option
+    :param prgm: `oarsub` or `oarctl sub`
     :return: The output of the oar command if `do_run` is True else the oar command
     """
-    cmd = ["oarsub"]
+    cmd = [prgm]
 
     if job_name is not None:
         cmd.extend(["--name", f"{job_name}"])

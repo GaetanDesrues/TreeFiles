@@ -3,7 +3,7 @@ from treefiles.decorators import debug, timer
 from treefiles.pdf import PDFMerger
 from treefiles.splot import SimplePlot as SPlot
 from treefiles.logs import get_logger, stream_csv_handler
-from treefiles.oar import start_oar, walltime, NotifyOar
+from treefiles.oar import start_oar, walltime, NotifyOar, Queue, Program
 from treefiles.temp import TmpDir, TmpFile
 
 try:
