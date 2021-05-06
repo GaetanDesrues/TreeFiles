@@ -15,6 +15,7 @@ else:
     from treefiles.pyvista_plot import PvPlot
 
 from treefiles.tables import Table
+from treefiles.sofa import Viewer, run_sofa
 from treefiles.commons import (
     join,
     isfile,

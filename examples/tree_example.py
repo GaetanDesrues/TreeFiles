@@ -1,8 +1,10 @@
+import logging
 import os
 import re
 from typing import List
 
 import treefiles as tf
+from treefiles import run_sofa
 
 
 @tf.timer
@@ -29,7 +31,8 @@ def main():
     # dir.remove_empty()
 
 
-
-
 if __name__ == "__main__":
+    logging.basicConfig(level=0)
+    log = tf.get_logger()
+
     main()
