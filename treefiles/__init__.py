@@ -16,6 +16,7 @@ else:
 
 from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
+from treefiles.np import NumpyEncoder
 from treefiles.commons import (
     join,
     isfile,
