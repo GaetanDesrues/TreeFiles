@@ -106,6 +106,18 @@ class Tree:
             self.dirs.append(type(self)(name, parent=self))
         return self.dirs[-1]
 
+    def jdir(self, path: str, sep: str = "/") -> T:
+        """
+        Create directory joining path
+
+        :param sep: separator used in `path`
+        :param path: folder path, sperated by `sep`, joined to self.abs()
+        """
+        path, o = path.split(sep), None
+        for i in path:
+            o = self.dir(i)
+        return o
+
     def file(self, *args: str, **kwargs: str):
         """
         Saves a filename at the current tree level
