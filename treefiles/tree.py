@@ -116,9 +116,9 @@ class Tree:
         :param sep: separator used in `path`
         :param path: folder path, sperated by `sep`, joined to self.abs()
         """
-        path, o = path.split(sep), None
+        path, o = path.split(sep), self
         for i in path:
-            o = self.dir(i)
+            o = o.dir(i)
         return o
 
     def file(self, *args: str, **kwargs: str):
