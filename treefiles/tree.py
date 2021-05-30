@@ -118,7 +118,10 @@ class Tree:
         """
         path, o = path.split(sep), self
         for i in path:
-            o = o.dir(i)
+            if i == "..":
+                o = o.p
+            else:
+                o = o.dir(i)
         return o
 
     def file(self, *args: str, **kwargs: str):
