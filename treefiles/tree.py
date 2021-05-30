@@ -26,9 +26,12 @@ class Tree:
         self.files = dict()
 
     @classmethod
-    def new(cls, file: str, *args: str) -> T:
+    def new(cls, file: str, *args: str, dump: bool = True, clean: bool = False) -> T:
         file = os.path.dirname(os.path.abspath(file))
-        return cls(os.path.join(file, *args)).dump()
+        c = cls(os.path.join(file, *args))
+        if dump:
+            c.dump(clean=clean)
+        return c
 
     def abs(self, path="") -> str:
         """
