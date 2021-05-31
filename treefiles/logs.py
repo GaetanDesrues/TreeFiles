@@ -56,6 +56,7 @@ def get_logger(
 
     """
     logger = logging.getLogger()
+    logging.getLogger('matplotlib').setLevel(logging.ERROR)
 
     if remove_handlers:
         for hdlr in logger.handlers:
