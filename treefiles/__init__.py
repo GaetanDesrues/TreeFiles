@@ -5,6 +5,9 @@ from treefiles.splot import SimplePlot as SPlot
 from treefiles.logs import get_logger, stream_csv_handler
 from treefiles.oar import start_oar, walltime, NotifyOar, Queue, Program
 from treefiles.temp import TmpDir, TmpFile
+from treefiles.tables import Table
+from treefiles.sofa import Viewer, run_sofa
+
 
 try:
     import pyvista as pv
@@ -14,9 +17,15 @@ except ImportError:
 else:
     from treefiles.pyvista_plot import PvPlot
 
-from treefiles.tables import Table
-from treefiles.sofa import Viewer, run_sofa
-from treefiles.np import NumpyEncoder
+
+try:
+    import numpy as np
+except ImportError:
+    pass
+else:
+    from treefiles.np import NumpyEncoder
+
+
 from treefiles.commons import (
     join,
     isfile,
