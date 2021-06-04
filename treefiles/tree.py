@@ -74,6 +74,8 @@ class Tree:
             - look in children levels recursively
         """
         if att in self.files:
+            if self.files[att] is None:
+                return
             return os.path.join(self.abs(), self.files[att])
         for d in self.dirs:
             if d._name == att:
