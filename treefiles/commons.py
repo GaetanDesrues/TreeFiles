@@ -209,6 +209,8 @@ def dump_zip(file_name: str, paths: Union[str, Tree, List[str]], name: str = Non
         the common directory name `name`.
     :param name: common directory name in zip file
     """
+    removeIfExists(file_name)
+
     if isinstance(paths, (str, Tree)):
         pa = Tree(paths)
         cdir = os.path.basename(pa.p.abs())
