@@ -211,7 +211,6 @@ def dump_zip(file_name: str, paths: Union[str, Tree, List[str]], name: str = Non
     """
     if isinstance(paths, (str, Tree)):
         pa = Tree(paths)
-        assert isDir(pa)
         cdir = os.path.basename(pa.p.abs())
         paths = get_all_file_paths(pa.abs())
         aname = [x.split(cdir)[1] for x in paths]
@@ -226,7 +225,6 @@ def dump_zip(file_name: str, paths: Union[str, Tree, List[str]], name: str = Non
 
     with ZipFile(file_name, "w") as z:
         for file, name in zip(paths, aname):
-            print(name)
             z.write(file, arcname=name)
 
 
