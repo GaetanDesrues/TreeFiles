@@ -5,7 +5,8 @@ import os
 import re
 import shutil
 from os.path import join, isfile, basename, isdir
-from typing import TypeVar, List
+from typing import TypeVar, List, Union
+from zipfile import ZipFile
 
 from treefiles.tree import Tree
 
@@ -25,14 +26,14 @@ T = TypeVar("T", bound=Tree)
 
 
 def isDir(path: [str, T]):
-    """ Wrapper of `os.path.isdir` """
+    """Wrapper of `os.path.isdir`"""
     if isinstance(path, Tree):
         return isdir(path.abs())
     return isdir(path)
 
 
 def load_yaml(fname: str, **kwargs):
-    """ Loads a yaml file with `yaml.load`
+    """Loads a yaml file with `yaml.load`
 
     :return: dict
     """
@@ -46,7 +47,7 @@ def load_yaml(fname: str, **kwargs):
 
 
 def dump_yaml(fname: str, data, **kwargs):
-    """ Dumps a dict to a yaml file with `yaml.dump`
+    """Dumps a dict to a yaml file with `yaml.dump`
 
     :param data: dict
     """
@@ -58,7 +59,7 @@ def dump_yaml(fname: str, data, **kwargs):
 
 
 def load_json(filename: str, **kwargs):
-    """ Loads a json file with `json.load`
+    """Loads a json file with `json.load`
 
     :return: dict
     """
@@ -67,7 +68,7 @@ def load_json(filename: str, **kwargs):
 
 
 def dump_json(filename: str, data, **kwargs):
-    """ Dumps a dict to a json file with `json.dump`
+    """Dumps a dict to a json file with `json.dump`
 
     :param data: dict
     """
@@ -77,42 +78,42 @@ def dump_json(filename: str, data, **kwargs):
 
 
 def pprint_json(data: dict):
-    """ Returns a pretty printed dict """
+    """Returns a pretty printed dict"""
     return json.dumps(data, indent=4)
 
 
 def curDir(file: str = None):
-    """ Absolute path of current directory """
+    """Absolute path of current directory"""
     return os.getcwd() if file is None else os.path.dirname(os.path.abspath(file))
 
 
 def curDirs(file: str, *paths: str):
-    """ Absolute path of current directory joined with `*paths` """
+    """Absolute path of current directory joined with `*paths`"""
     return join(curDir(file), *paths)
 
 
 def removeIfExists(fname: str):
-    """ Remove `fname` if it exists """
+    """Remove `fname` if it exists"""
     if os.path.exists(fname):
         os.remove(fname)
 
 
 def remove(*args: str):
-    """ Remove files in globs `*args` if they exist """
+    """Remove files in globs `*args` if they exist"""
     for t in args:
         for f in glob.glob(t):
             removeIfExists(f)
 
 
 def move(arg: str, dest: str):
-    """ Move files in glob `arg` to `dest` with `shutil.move` """
+    """Move files in glob `arg` to `dest` with `shutil.move`"""
     for f in glob.glob(arg):
         removeIfExists(join(dest, os.path.basename(f)))
         shutil.move(f, dest)
 
 
 def copyfile(arg: str, dest: str):
-    """ Copy a file in glob `arg` to `dest` with `shutil.copyfile`
+    """Copy a file in glob `arg` to `dest` with `shutil.copyfile`
 
     `dest` is a directory path, later joined with args' basenames
     """
@@ -121,7 +122,7 @@ def copyfile(arg: str, dest: str):
 
 
 def copyFile(src: str, dst: str):
-    """ Copy a file `src` to `dst` with `shutil.copyfile`
+    """Copy a file `src` to `dst` with `shutil.copyfile`
 
     dst is a file, the file path of the copied file
     """
@@ -156,7 +157,7 @@ def load_txt(fname: str, delimiter=" "):
 
 
 def find_new_dir(temp: str, start=0):
-    """ Return new directory name indexed as the first `start` index available in `temp` formattable path """
+    """Return new directory name indexed as the first `start` index available in `temp` formattable path"""
     while isdir(temp.format(start)):
         start += 1
     return temp.format(start)
@@ -185,3 +186,54 @@ def listdir(root: [T, str]) -> List[str]:
     l = os.listdir(root.abs())
     l = natural_sort(l)
     return list(map(root.path, l))
+
+
+def load_zip(file_name: str):
+    """
+    Extract a zip file
+
+    :param file_name: path to the zip file
+    """
+    with ZipFile(file_name, "r") as z:
+        z.extractall()
+
+
+def dump_zip(file_name: str, paths: Union[str, Tree, List[str]], name: str = None):
+    """
+    Writes a bunch of files to a zip file
+
+    :param file_name: path to the zip file
+    :param paths: either a directory path (in this case all files under it
+        are included in the zip file), or a list of files. The tree structure is respected
+        only if a directory path is given. If a list is given, all files are zipped under
+        the common directory name `name`.
+    :param name: common directory name in zip file
+    """
+    if isinstance(paths, (str, Tree)):
+        pa = Tree(paths)
+        assert isDir(pa)
+        cdir = os.path.basename(pa.p.abs())
+        paths = get_all_file_paths(pa.abs())
+        aname = [x.split(cdir)[1] for x in paths]
+        if name is not None:
+            cad = os.path.basename(pa.abs())
+            aname = [x.replace(cad, name) for x in aname]
+
+    else:
+        if name is None:
+            name = "zipped_files"
+        aname = [os.path.join(name, os.path.basename(x)) for x in paths]
+
+    with ZipFile(file_name, "w") as z:
+        for file, name in zip(paths, aname):
+            print(name)
+            z.write(file, arcname=name)
+
+
+def get_all_file_paths(directory) -> List[str]:
+    file_paths = []
+    for root, _, files in os.walk(directory):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            file_paths.append(filepath)
+    return file_paths

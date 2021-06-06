@@ -49,4 +49,6 @@ from treefiles.commons import (
     greedy_download,
     natural_sort,
     listdir,
+    load_zip,
+    dump_zip,
 )
