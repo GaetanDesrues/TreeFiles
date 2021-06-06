@@ -212,5 +212,9 @@ class Tree:
 
         return listdir(self)
 
+    @property
+    def basename(self):
+        return os.path.basename(self.abs())
+
 
 T = TypeVar("T", bound=Tree)
