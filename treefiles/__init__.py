@@ -7,7 +7,7 @@ from treefiles.oar import start_oar, walltime, NotifyOar, Queue, Program
 from treefiles.temp import TmpDir, TmpFile
 from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
-
+from treefiles.mails import send_mail, register_treemails
 
 try:
     import pyvista as pv
