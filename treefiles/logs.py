@@ -56,7 +56,7 @@ def get_logger(
 
     """
     logger = logging.getLogger()
-    logging.getLogger('matplotlib').setLevel(logging.ERROR)
+    logging.getLogger("matplotlib").setLevel(logging.ERROR)
 
     if remove_handlers:
         for hdlr in logger.handlers:
@@ -72,6 +72,10 @@ def get_logger(
             logger.addHandler(x)
 
     return logger
+
+
+def get_csv_logger():
+    return get_logger(default=False, handlers=[stream_csv_handler()])
 
 
 def stream_csv_handler(**kwargs):
