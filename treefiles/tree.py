@@ -1,9 +1,10 @@
-from __future__ import annotations
-
 import glob
 import os
 import shutil
 from typing import TypeVar, List
+
+
+T = TypeVar("T", bound="Tree")
 
 
 class Tree:
@@ -215,6 +216,3 @@ class Tree:
     @property
     def basename(self):
         return os.path.basename(self.abs())
-
-
-T = TypeVar("T", bound=Tree)
