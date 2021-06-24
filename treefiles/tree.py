@@ -1,8 +1,7 @@
 import glob
 import os
 import shutil
-from typing import TypeVar, List
-
+from typing import TypeVar, List, Union
 
 T = TypeVar("T", bound="Tree")
 
@@ -24,6 +23,7 @@ class Tree:
         self.parent = parent
         self._name = name
         self.dirs = []
+        self.ndirs = {}
         self.files = dict()
 
     @classmethod
@@ -49,7 +49,7 @@ class Tree:
         return self._name
 
     @root.setter
-    def root(self, x: [T, str]):
+    def root(self, x: Union[T, str]):
         if isinstance(x, Tree):
             self._name = x.abs()
         else:
@@ -85,6 +85,9 @@ class Tree:
             found = getattr(d, att)
             if found is not None:
                 return found
+        for alias, d in self.ndirs.items():
+            if alias == att:
+                return d
         if self.parent is None:
             raise AttributeError(f"Attribute {att!r} not found in {self._name}")
 
@@ -97,11 +100,13 @@ class Tree:
         s = f"{self._name}\n"
         for d in self.dirs:
             s += f"{' '*i}\u2514 {d.__repr__(i+2)}\n"
-        for f in self.files.values():
-            s += f"{' '*i}\u2514 {f}\n"
+        for al, d in self.ndirs.items():
+            s += f"{' '*i}\u2514 [{al}] {d.__repr__(i+2)}\n"
+        for al, f in self.files.items():
+            s += f"{' '*i}\u2514 [{al}] {f}\n"
         return s.rstrip()
 
-    def dir(self, *names: str) -> T:
+    def dir(self, *names: str, **named_dirs: str) -> T:
         """
         Adds directories to the current level
 
@@ -110,7 +115,12 @@ class Tree:
         """
         for name in names:
             self.dirs.append(type(self)(name, parent=self))
-        return self.dirs[-1]
+        for alias, name in named_dirs.items():
+            self.ndirs[alias] = type(self)(name, parent=self)
+        if len(self.dirs) > 0:
+            return self.dirs[-1]
+        if len(self.ndirs) > 0:
+            return self.ndirs[list(named_dirs.keys())[-1]]
 
     def jdir(self, path: str, sep: str = "/") -> T:
         """
@@ -216,3 +226,19 @@ class Tree:
     @property
     def basename(self):
         return os.path.basename(self.abs())
+
+    def to_dict(self) -> dict:
+        return dict(
+            name=self._name,
+            dirs=[x.to_dict() for x in self.dirs],
+            ndirs={al: x.to_dict() for al, x in self.ndirs.items()},
+            files={al: x for al, x in self.files.items()},
+        )
+
+    @classmethod
+    def from_dict(cls, d:dict):
+        c = cls(d["name"])
+        c.files = d.get("files", [])
+        c.dirs = [cls.from_dict(x) for x in d.get("dirs", [])]
+        c.ndirs = {al: cls.from_dict(x) for al, x in d.get("ndirs", {}).items()}
+        return c

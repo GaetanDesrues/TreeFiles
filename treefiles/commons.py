@@ -237,3 +237,21 @@ def get_all_file_paths(directory) -> List[str]:
             filepath = os.path.join(root, filename)
             file_paths.append(filepath)
     return file_paths
+
+
+def get_timestamp(fmt: str = "%d%m%Y_%H%M%S"):
+    """
+    Return timestamp: 25122021_151240
+    """
+    from datetime import datetime
+
+    return datetime.now().strftime(fmt)
+
+
+def insert_before(src: str, sub: str, data) -> str:
+    """
+    >>> insert_before("long_filename.mha", ".mha", "_newfile")
+    long_filename_newfile.mha
+    """
+    i = src.find(sub)
+    return f"{src[:i]}{data}{src[i:]}"
