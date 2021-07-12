@@ -53,4 +53,5 @@ from treefiles.commons import (
     dump_zip,
     get_timestamp,
     insert_before,
+    flatten_dict,
 )
