@@ -97,7 +97,10 @@ class Tree:
 
         :param i: recursion parameter
         """
-        s = f"{self._name}\n"
+        s = f"{self._name}"
+        if i == 2:
+            s += f" ({self.abs()})"
+        s += "\n"
         for d in self.dirs:
             s += f"{' '*i}\u2514 {d.__repr__(i+2)}\n"
         for al, d in self.ndirs.items():
@@ -236,7 +239,7 @@ class Tree:
         )
 
     @classmethod
-    def from_dict(cls, d:dict):
+    def from_dict(cls, d: dict):
         c = cls(d["name"])
         c.files = d.get("files", [])
         c.dirs = [cls.from_dict(x) for x in d.get("dirs", [])]
