@@ -54,4 +54,16 @@ from treefiles.commons import (
     get_timestamp,
     insert_before,
     flatten_dict,
+    update_dict,
 )
+
+
+# Debug mode
+# if tf.DEBUG:
+#   ...
+DEBUG = False
+
+
+def set_debug(active: bool):
+    global DEBUG
+    DEBUG = active
