@@ -270,3 +270,9 @@ def flatten_dict(d, parent_key="", sep="_"):
         else:
             items.append((new_key, v))
     return dict(items)
+
+
+def update_dict(fname:str, **kw):
+    d = load_json(fname)
+    d.update(kw)
+    dump_json(fname, d)
