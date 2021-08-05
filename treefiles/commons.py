@@ -64,6 +64,7 @@ def load_json(filename: str, **kwargs):
 
     :return: dict
     """
+    filename = ensure_ext(filename, "json")
     with open(filename, "r") as f:
         return json.load(f, **kwargs)
 
@@ -73,6 +74,7 @@ def dump_json(filename: str, data, **kwargs):
 
     :param data: dict
     """
+    filename = ensure_ext(filename, "json")
     kwargs["indent"] = kwargs.get("indent", 4)
     with open(filename, "w") as f:
         json.dump(data, f, **kwargs)
@@ -144,12 +146,14 @@ def link(in_fname: str, out_dir: T):
 
 
 def dump_txt(fname: str, data, delimiter=" "):
+    fname = ensure_ext(fname, "txt")
     with open(fname, "w") as f:
         for line in data:
             f.write(str(delimiter).join(map(str, line)) + "\n")
 
 
 def load_txt(fname: str, delimiter=" "):
+    fname = ensure_ext(fname, "txt")
     with open(fname, "r") as f:
         data = f.read().split("\n")
     while data[-1] == "":
@@ -276,3 +280,9 @@ def update_dict(fname:str, **kw):
     d = load_json(fname)
     d.update(kw)
     dump_json(fname, d)
+
+
+def ensure_ext(fname: str, ext: str):
+    if not fname.endswith(f".{ext}"):
+        fname += f".{ext}"
+    return fname

@@ -55,6 +55,7 @@ from treefiles.commons import (
     insert_before,
     flatten_dict,
     update_dict,
+    ensure_ext,
 )
 
 
