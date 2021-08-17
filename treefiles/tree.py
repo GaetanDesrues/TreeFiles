@@ -239,9 +239,37 @@ class Tree:
         )
 
     @classmethod
-    def from_dict(cls, d: dict):
+    def from_dict(cls, d: dict, parent: T = None):
         c = cls(d["name"])
+        c.parent = parent
         c.files = d.get("files", [])
-        c.dirs = [cls.from_dict(x) for x in d.get("dirs", [])]
-        c.ndirs = {al: cls.from_dict(x) for al, x in d.get("ndirs", {}).items()}
+        c.dirs = [cls.from_dict(x, c) for x in d.get("dirs", [])]
+        c.ndirs = {al: cls.from_dict(x, c) for al, x in d.get("ndirs", {}).items()}
         return c
+
+
+def jTree(*args) -> T:
+    from treefiles.commons import join
+
+    return Tree(join(*args))
+
+
+def fTree(file: str, *args: str, dump: bool = False, clean: bool = False) -> T:
+    return Tree.new(file, *args, dump=dump, clean=clean)
+
+
+# class FTree(Tree):
+#     # def __init__(self, file: str, *args: str):
+#     #     super().new(file, *args, dump=False)
+#
+#     def __new__(cls, file: str, *args: str) -> T:
+#         ins = super().__new__(cls)
+#         file = os.path.dirname(os.path.abspath(file))
+#         ins.__init__(os.path.join(file, *args))
+#         return ins
+
+
+# if __name__ == "__main__":
+#     aa = FTree(__file__, "dd", "test.py")
+#     print(type(aa))
+#     print(aa.root)

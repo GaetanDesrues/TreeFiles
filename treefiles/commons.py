@@ -26,6 +26,12 @@ except:
 T = TypeVar("T", bound=Tree)
 
 
+def join(*paths: [str, T]):
+    """Wrapper of `os.path.join`"""
+    x = map(lambda y: y.abs() if isinstance(y, Tree) else y, paths)
+    return os.path.join(*x)
+
+
 def isDir(path: [str, T]):
     """Wrapper of `os.path.isdir`"""
     if isinstance(path, Tree):
@@ -276,7 +282,7 @@ def flatten_dict(d, parent_key="", sep="_"):
     return dict(items)
 
 
-def update_dict(fname:str, **kw):
+def update_dict(fname: str, **kw):
     d = load_json(fname)
     d.update(kw)
     dump_json(fname, d)
