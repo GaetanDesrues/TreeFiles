@@ -56,6 +56,7 @@ from treefiles.commons import (
     flatten_dict,
     update_dict,
     ensure_ext,
+    no_stdout,
 )
 
 

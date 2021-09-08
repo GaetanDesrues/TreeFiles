@@ -295,10 +295,10 @@ def ensure_ext(fname: str, ext: str):
     return fname
 
 
-class NoStdout:
+class no_stdout:
     """
     Usage:
-        with tf.NoStdout(is_enabled: bool):
+        with tf.no_stdout(is_enabled: bool):
             ...
     """
     def __init__(self, enable: bool):
