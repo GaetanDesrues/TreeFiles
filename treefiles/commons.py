@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import shutil
+import sys
 from os.path import join, isfile, basename, isdir
 from typing import TypeVar, List, Union
 from zipfile import ZipFile
@@ -292,3 +293,24 @@ def ensure_ext(fname: str, ext: str):
     if not fname.endswith(f".{ext}"):
         fname += f".{ext}"
     return fname
+
+
+class NoStdout:
+    """
+    Usage:
+        with tf.NoStdout(is_enabled: bool):
+            ...
+    """
+    def __init__(self, enable: bool):
+        self.enable = enable
+        if enable:
+            self.old_target = sys.stdout
+            sys.stdout = open(os.devnull, "w")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.enable:
+            sys.stdout.close()
+            sys.stdout = self.old_target
