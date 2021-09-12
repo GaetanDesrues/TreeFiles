@@ -9,6 +9,9 @@ from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+
 try:
     import pyvista as pv
     from MeshObject import Object
@@ -66,6 +69,6 @@ from treefiles.commons import (
 DEBUG = False
 
 
-def set_debug(active: bool):
+def set_debug(active: bool = True):
     global DEBUG
     DEBUG = active

@@ -66,22 +66,24 @@ def dump_yaml(fname: str, data, **kwargs):
         f.write(yaml.dump(data, **kwargs))
 
 
-def load_json(filename: str, **kwargs):
+def load_json(filename: str, force_ext: bool = True, **kwargs):
     """Loads a json file with `json.load`
 
     :return: dict
     """
-    filename = ensure_ext(filename, "json")
+    if force_ext:
+        filename = ensure_ext(filename, "json")
     with open(filename, "r") as f:
         return json.load(f, **kwargs)
 
 
-def dump_json(filename: str, data, **kwargs):
+def dump_json(filename: str, data, force_ext: bool = True, **kwargs):
     """Dumps a dict to a json file with `json.dump`
 
     :param data: dict
     """
-    filename = ensure_ext(filename, "json")
+    if force_ext:
+        filename = ensure_ext(filename, "json")
     kwargs["indent"] = kwargs.get("indent", 4)
     with open(filename, "w") as f:
         json.dump(data, f, **kwargs)
@@ -301,6 +303,7 @@ class no_stdout:
         with tf.no_stdout(is_enabled: bool):
             ...
     """
+
     def __init__(self, enable: bool):
         self.enable = enable
         if enable:
