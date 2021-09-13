@@ -8,6 +8,7 @@ from treefiles.temp import TmpDir, TmpFile
 from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
+from treefiles.poolception import NestablePool
 
 from tqdm import tqdm
 import matplotlib.pyplot as plt
