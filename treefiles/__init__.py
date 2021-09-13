@@ -10,8 +10,15 @@ from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
 
-from tqdm import tqdm
-import matplotlib.pyplot as plt
+try:
+    from tqdm import tqdm
+except ImportError:
+    pass
+
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    pass
 
 try:
     import pyvista as pv
