@@ -209,7 +209,7 @@ def load_zip(file_name: str):
     :param file_name: path to the zip file
     """
     with ZipFile(file_name, "r") as z:
-        z.extractall()
+        z.extractall(path=curDir(file_name))
 
 
 def dump_zip(file_name: str, paths: Union[str, Tree, List[str]], name: str = None):
