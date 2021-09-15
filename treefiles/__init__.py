@@ -68,6 +68,8 @@ from treefiles.commons import (
     update_dict,
     ensure_ext,
     no_stdout,
+    print_link,
+    print_link_to_obj,
 )
 
 
