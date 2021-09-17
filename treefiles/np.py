@@ -15,3 +15,7 @@ class NumpyEncoder(json.JSONEncoder):
             value = list(obj)
             return [value[0], value[-1] + 1]
         return super().default(obj)
+
+
+def a(*w, **k):
+    return np.array(*w, **k)

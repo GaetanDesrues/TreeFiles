@@ -317,3 +317,16 @@ class no_stdout:
         if self.enable:
             sys.stdout.close()
             sys.stdout = self.old_target
+
+
+def none(var, default_value):
+    return default_value if var is None else var
+
+
+def get_iterable(x):
+    from collections.abc import Iterable
+
+    if isinstance(x, Iterable):
+        return x
+    else:
+        return [x]

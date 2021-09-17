@@ -9,6 +9,7 @@ from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
+from treefiles.pyplot import get_color_cycle, despine, move_legend
 
 try:
     from tqdm import tqdm
@@ -19,6 +20,11 @@ try:
     import matplotlib.pyplot as plt
 except ImportError:
     pass
+
+# try:
+#     import seaborn as sns
+# except ImportError:
+#     pass
 
 try:
     import pyvista as pv
@@ -34,7 +40,8 @@ try:
 except ImportError:
     pass
 else:
-    from treefiles.np import NumpyEncoder
+    from treefiles.np import NumpyEncoder, a
+
 
 
 from treefiles.commons import (
@@ -68,6 +75,8 @@ from treefiles.commons import (
     update_dict,
     ensure_ext,
     no_stdout,
+    none,
+    get_iterable,
 )
 
 
