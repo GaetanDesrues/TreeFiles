@@ -5,8 +5,8 @@ try:
     import matplotlib.pyplot as plt
     import numpy as np
 except ImportError:
-    print("Could not import matplotlib or numpy")
-    raise
+    pass
+    # print("Could not import matplotlib or numpy")
 
 
 def get_color_cycle():
