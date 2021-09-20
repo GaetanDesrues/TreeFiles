@@ -21,11 +21,6 @@ try:
 except ImportError:
     pass
 
-# try:
-#     import seaborn as sns
-# except ImportError:
-#     pass
-
 try:
     import pyvista as pv
     from MeshObject import Object
@@ -40,8 +35,7 @@ try:
 except ImportError:
     pass
 else:
-    from treefiles.np import NumpyEncoder, a
-
+    from treefiles.np import NumpyEncoder
 
 
 from treefiles.commons import (
@@ -77,6 +71,8 @@ from treefiles.commons import (
     no_stdout,
     none,
     get_iterable,
+    print_link,
+    print_link_to_obj,
 )
 
 
