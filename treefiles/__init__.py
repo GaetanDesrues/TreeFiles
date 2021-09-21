@@ -1,4 +1,4 @@
-from treefiles.tree import Tree, jTree, fTree
+from treefiles.tree import Tree, jTree, fTree, Str, S, T, TS
 from treefiles.decorators import debug, timer
 from treefiles.pdf import PDFMerger
 from treefiles.splot import SimplePlot as SPlot

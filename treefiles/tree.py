@@ -1,9 +1,11 @@
 import glob
 import os
 import shutil
-from typing import TypeVar, List, Union
+from typing import TypeVar, List, Union, Optional
 
 T = TypeVar("T", bound="Tree")
+S = TypeVar("S", bound="Str")
+TS = Union[S, T, str]
 
 
 class Tree:
@@ -14,14 +16,14 @@ class Tree:
     :param parent: parent tree if current tree is not the main root
     """
 
-    def __init__(self, name: [str, T] = None, parent: T = None):
+    def __init__(self, name: TS = None, parent: T = None):
         if name is not None:
             if isinstance(name, Tree):
                 name = name.abs()
         else:
             name = "root"
         self.parent = parent
-        self._name = name
+        self._name = Str(name)
         self.dirs = []
         self.ndirs = {}
         self.files = dict()
@@ -34,26 +36,25 @@ class Tree:
             c.dump(clean=clean)
         return c
 
-    def abs(self, path="") -> str:
+    def abs(self, path="") -> S:
         """
         Returns the absolute path of a tree root
 
         :param path: recursion parameter
         """
         if self.parent is None:
-            return os.path.abspath(self._name)
-        return os.path.join(self.parent.abs(path), self._name)
+            return Str(os.path.abspath(self._name))
+        return Str(os.path.join(self.parent.abs(path), self._name))
 
     @property
-    def root(self) -> str:
+    def root(self) -> S:
         return self._name
 
     @root.setter
-    def root(self, x: Union[T, str]):
+    def root(self, x: TS):
         if isinstance(x, Tree):
-            self._name = x.abs()
-        else:
-            self._name = x
+            x = x.abs()
+        self._name = Str(x)
 
     @property
     def p(self) -> T:
@@ -63,7 +64,7 @@ class Tree:
         dirs = self.abs().split(os.sep)
         return type(self)(os.sep.join(dirs[:-1]))
 
-    def __getattr__(self, att) -> [str, T]:
+    def __getattr__(self, att) -> Optional[TS]:
         """
         Finds an attribute
 
@@ -77,7 +78,7 @@ class Tree:
         if att in self.files:
             if self.files[att] is None:
                 return
-            return os.path.join(self.abs(), self.files[att])
+            return Str(os.path.join(self.abs(), self.files[att]))
         for d in self.dirs:
             if d._name == att:
                 return d
@@ -127,7 +128,7 @@ class Tree:
 
     def jdir(self, path: str, sep: str = "/") -> T:
         """
-        Create directory joining path
+        Create directory by joining path on sep
 
         :param sep: separator used in `path`
         :param path: folder path, sperated by `sep`, joined to self.abs()
@@ -140,7 +141,7 @@ class Tree:
                 o = o.dir(i)
         return o
 
-    def file(self, *args: str, **kwargs: str):
+    def file(self, *args: str, **kwargs: str) -> T:
         """
         Saves a filename at the current tree level
 
@@ -152,15 +153,16 @@ class Tree:
             self.files[name] = arg
         for k, v in kwargs.items():
             self.files[k] = v
+        return self
 
-    def path(self, *args: str) -> str:
+    def path(self, *args: str) -> S:
         """
         Creates a path starting from parent
 
         :param args: paths to join
         :return: the joined absolute path
         """
-        return os.path.join(self.abs(), *args)
+        return Str(os.path.join(self.abs(), *args))
 
     def dump(self, clean: bool = False) -> T:
         """
@@ -209,13 +211,13 @@ class Tree:
             {"_name": state.get("_name"), "parent": None, "dirs": [], "files": {}}
         )
 
-    def glob(self, pattern: str) -> List[str]:
+    def glob(self, pattern: str) -> List[S]:
         """
         Return a list of paths matching a pathname pattern, see <glob.glob>
         """
         from treefiles.commons import natural_sort
 
-        return natural_sort(glob.glob(self.path(pattern)))
+        return [Str(x) for x in natural_sort(glob.glob(self.path(pattern)))]
 
     @property
     def ls(self):
@@ -256,6 +258,15 @@ def jTree(*args) -> T:
 
 def fTree(file: str, *args: str, dump: bool = False, clean: bool = False) -> T:
     return Tree.new(file, *args, dump=dump, clean=clean)
+
+
+class Str(str):
+    def __new__(cls, value):
+        obj = str.__new__(cls, value)
+        return obj
+
+    def f(self, *a, **k) -> S:
+        return Str(self.format(*a, **k))
 
 
 # class FTree(Tree):
