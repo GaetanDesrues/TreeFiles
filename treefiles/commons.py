@@ -8,10 +8,10 @@ import re
 import shutil
 import sys
 from os.path import join, isfile, basename, isdir
-from typing import TypeVar, List, Union
+from typing import List, Union
 from zipfile import ZipFile
 
-from treefiles.tree import Tree
+from treefiles.tree import Tree, Str, S, T, TS
 
 try:
     try:
@@ -25,16 +25,13 @@ except:
 # `pip install PyYAML` to install yaml
 
 
-T = TypeVar("T", bound=Tree)
-
-
-def join(*paths: [str, T]):
+def join(*paths: TS) -> S:
     """Wrapper of `os.path.join`"""
     x = map(lambda y: y.abs() if isinstance(y, Tree) else y, paths)
-    return os.path.join(*x)
+    return Str(os.path.join(*x))
 
 
-def isDir(path: [str, T]):
+def isDir(path: TS):
     """Wrapper of `os.path.isdir`"""
     if isinstance(path, Tree):
         return isdir(path.abs())
@@ -42,10 +39,7 @@ def isDir(path: [str, T]):
 
 
 def load_yaml(fname: str, **kwargs):
-    """Loads a yaml file with `yaml.load`
-
-    :return: dict
-    """
+    """Loads a yaml file with `yaml.load`"""
     if not YAML:
         logging.error("You must install yaml: `pip install PyYAML`")
     if not isfile(fname):
@@ -56,10 +50,7 @@ def load_yaml(fname: str, **kwargs):
 
 
 def dump_yaml(fname: str, data, **kwargs):
-    """Dumps a dict to a yaml file with `yaml.dump`
-
-    :param data: dict
-    """
+    """Dumps a dict to a yaml file with `yaml.dump`"""
     if not YAML:
         logging.error("You must install yaml")
     with open(fname, "w") as f:
@@ -100,9 +91,9 @@ def curDir(file: str = None):
     return os.getcwd() if file is None else os.path.dirname(os.path.abspath(file))
 
 
-def curDirs(file: str, *paths: str):
+def curDirs(file: str, *paths: str) -> S:
     """Absolute path of current directory joined with `*paths`"""
-    return join(curDir(file), *paths)
+    return Str(join(curDir(file), *paths))
 
 
 def removeIfExists(fname: str):
@@ -191,7 +182,7 @@ def natural_sort(l: List[str]) -> List[str]:
     return sorted(l, key=alphanum_key)
 
 
-def listdir(root: [T, str]) -> List[str]:
+def listdir(root: [T, str]) -> List[S]:
     """
     Returns a list of files and folders in directory
     """
@@ -200,7 +191,7 @@ def listdir(root: [T, str]) -> List[str]:
 
     l = os.listdir(root.abs())
     l = natural_sort(l)
-    return list(map(root.path, l))
+    return [Str(root.path(x)) for x in l]
 
 
 def load_zip(file_name: str):
@@ -254,7 +245,7 @@ def get_all_file_paths(directory) -> List[str]:
     return file_paths
 
 
-def get_timestamp(fmt: str = "%d%m%Y_%H%M%S"):
+def get_timestamp(fmt: str = "%d%m%Y_%H%M%S") -> str:
     """
     Return timestamp: 25122021_151240
     """
@@ -292,10 +283,10 @@ def update_dict(fname: str, **kw):
     dump_json(fname, d)
 
 
-def ensure_ext(fname: str, ext: str):
+def ensure_ext(fname: str, ext: str) -> S:
     if not fname.endswith(f".{ext}"):
         fname += f".{ext}"
-    return fname
+    return Str(fname)
 
 
 class no_stdout:
@@ -321,10 +312,12 @@ class no_stdout:
 
 
 def none(var, default_value):
+    """Quick 'if is None'"""
     return default_value if var is None else var
 
 
 def get_iterable(x):
+    """Ensure x is iterable"""
     from collections.abc import Iterable
 
     if isinstance(x, Iterable):

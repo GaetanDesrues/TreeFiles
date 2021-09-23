@@ -1,12 +1,16 @@
+import unittest
 import pickle
 import shutil
-import unittest
 
 import treefiles as tf
 
 
 class TestFiles(unittest.TestCase):
-    my_dir = tf.Tree(tf.curDirs(__file__, "foo"))
+    my_dir = tf.fTree(__file__, "foo")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.my_dir.abs())
 
     def test_dir(self):
         self.my_dir.dir("test").dump()
@@ -42,10 +46,10 @@ class TestFiles(unittest.TestCase):
         self.assertEqual(self.my_dir.abs(), my_dir.abs())
 
     def test_oar(self):
-        res = tf.start_oar(runme_str="runme.sh",)
-        _res = "oarsub --resource /host=1/core=4,walltime=00:10:00 -J --queue default runme.sh"
-        self.assertIs(type(res), str)
-        self.assertEqual(res, _res)
+        res = tf.start_oar(runme_str="runme.sh", do_run=False)
+        _res = "oarsub --resource /host=1/core=1,walltime=00:01:00 --queue default runme.sh"
+        self.assertIsInstance(res, list)
+        self.assertEqual(" ".join(res), _res)
 
     def test_tree_parent_dir(self):
         _dir = tf.Tree.new(__file__, "foo")
@@ -58,6 +62,18 @@ class TestFiles(unittest.TestCase):
             self.assertTrue(tf.isDir(tmp.abs()))
             fname = tmp.abs()
         self.assertFalse(tf.isDir(fname))
+
+    def test_tree_format(self):
+        root = self.my_dir.dump().file("t.tree")
+        root.dir(k="j").file(oui="non.txt")
+        root.to_file(root.t)
+        o = tf.Tree.from_file(self.my_dir.path("t.tree"))
+        self.assertEqual(o.k.oui, self.my_dir.path("j/non.txt"))
+
+    def test_str(self):
+        aa = self.my_dir.path("oui")
+        self.assertIsInstance(aa.parent, tf.Tree)
+        self.assertEqual(aa.sibling("oui"), aa)
 
 
 if __name__ == "__main__":
