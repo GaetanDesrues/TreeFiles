@@ -1,3 +1,5 @@
+import os
+import re
 from dataclasses import dataclass
 from typing import List
 
@@ -59,6 +61,11 @@ def parse_lines(lines) -> List[Line]:
                 x = s[0]
             elif len(s) == 2:
                 y.comment = s[1].strip()
+
+        # Replace env variables
+        while is_in("${", x):
+            m = re.search(r"\${(\w+)}", x)
+            x = x[: m.span()[0]] + os.environ[m.group(1)] + x[m.span()[1] :]
 
         # Read file or dir entry
         if is_in(".", "-", ":", x):

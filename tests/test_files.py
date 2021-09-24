@@ -1,6 +1,6 @@
-import unittest
 import pickle
 import shutil
+import unittest
 
 import treefiles as tf
 

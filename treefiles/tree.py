@@ -252,21 +252,39 @@ class Tree:
         return c
 
     @classmethod
-    def from_file(cls, fname: S):
+    def from_file(cls, *args: S, ensure_ext: bool = True):
+        fname = args[0]
+        if fname.endswith(".py"):
+            fname = os.path.join(os.path.dirname(os.path.abspath(fname)), *args[1:])
+
+        if ensure_ext:
+            from treefiles import ensure_ext as ee
+
+            fname = ee(fname, "tree")
+
         with open(fname) as f:
             lines = f.readlines()
 
         l = parse_lines(lines)
         set_parents(l)
 
-        objs = [cls(l[0].value)]
+        c0 = cls(l[0].value)
+        if c0.abs() != l[0].value:
+            c0.root = os.path.join(os.path.dirname(fname), l[0].value)
+
+        objs = [c0]
         for x in l[1:]:
             parent = objs[x.parent_line]
             parent = x.callback(parent)
             objs.append(parent)
         return objs[0]
 
-    def to_file(self, fname: S, comment=None):
+    def to_file(self, fname: S, comment=None, ensure_ext: bool = True):
+        if ensure_ext:
+            from treefiles import ensure_ext as ee
+
+            fname = ee(fname, "tree")
+
         with open(fname, "w") as f:
             f.write(self.pprint(comment=comment))
 
