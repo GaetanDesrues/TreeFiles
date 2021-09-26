@@ -66,6 +66,13 @@ class Tree:
         dirs = self.abs().split(os.sep)
         return type(self)(os.sep.join(dirs[:-1]))
 
+    def copy(self):
+        c = type(self)(self.root)
+        c.dirs = [x.copy() for x in self.dirs]
+        c.ndirs = {k: x.copy() for k, x in self.ndirs.items()}
+        c.files = dict(self.files)
+        return c
+
     def __getattr__(self, att) -> Optional[TS]:
         """
         Finds an attribute
