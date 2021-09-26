@@ -57,10 +57,9 @@ def parse_lines(lines) -> List[Line]:
         # skip comments
         if is_in("#", x):
             s = x.split("#")
-            if len(s) == 1:
-                x = s[0]
-            elif len(s) == 2:
-                y.comment = s[1].strip()
+            x = s[0]
+            if len(s) > 1:
+                y.comment = " ".join(s[1:]).strip()
 
         # Replace env variables
         while is_in("${", x):

@@ -268,6 +268,8 @@ class Tree:
         l = parse_lines(lines)
         set_parents(l)
 
+        # If root absolute path is different from the given root,
+        # the dirname is considered parent
         c0 = cls(l[0].value)
         if c0.abs() != l[0].value:
             c0.root = os.path.join(os.path.dirname(fname), l[0].value)
