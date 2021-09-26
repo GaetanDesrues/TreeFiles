@@ -67,7 +67,7 @@ def parse_lines(lines) -> List[Line]:
             x = x[: m.span()[0]] + os.environ[m.group(1)] + x[m.span()[1] :]
 
         # Read file or dir entry
-        if is_in(".", "-", ":", x):
+        if is_in(".", "-", ":", '<', x):
             key, x = x[0], x[1:]
             if key == ".":
                 y.entry_type = "dir"
@@ -75,6 +75,10 @@ def parse_lines(lines) -> List[Line]:
             elif key == "-":
                 y.entry_type = "file"
                 y.name, y.value = split_lin(x)
+            elif key == "<":
+                y.entry_type = "import"
+                y.name, y.value = split_lin(x)
+                raise NotImplementedError("`<` not yet implemented")
 
         if y.entry_type:
             _lines.append(y)
