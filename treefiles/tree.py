@@ -66,11 +66,12 @@ class Tree:
         dirs = self.abs().split(os.sep)
         return type(self)(os.sep.join(dirs[:-1]))
 
-    def copy(self):
-        c = type(self)(self.root)
-        c.dirs = [x.copy() for x in self.dirs]
-        c.ndirs = {k: x.copy() for k, x in self.ndirs.items()}
+    def copy(self, root=None, parent=None):
+        c = type(self)(self.root if root is None else root)
+        c.dirs = [x.copy(parent=c) for x in self.dirs]
+        c.ndirs = {k: x.copy(parent=c) for k, x in self.ndirs.items()}
         c.files = dict(self.files)
+        c.parent = parent
         return c
 
     def __getattr__(self, att) -> Optional[TS]:
@@ -111,12 +112,15 @@ class Tree:
         if i == 2:
             s += f" ({self.abs()})"
         s += "\n"
+        for al, f in self.files.items():
+            kk = ""
+            if al != os.path.splitext(f)[0]:
+                kk = f" [{al}]"
+            s += f"{' '*i}\u2514{kk} {f}\n"
         for d in self.dirs:
             s += f"{' '*i}\u2514 {d.__repr__(i+2)}\n"
         for al, d in self.ndirs.items():
             s += f"{' '*i}\u2514 [{al}] {d.__repr__(i+2)}\n"
-        for al, f in self.files.items():
-            s += f"{' '*i}\u2514 [{al}] {f}\n"
         return s.rstrip()
 
     def dir(self, *names: str, **named_dirs: str) -> T:
@@ -259,6 +263,29 @@ class Tree:
         return c
 
     @classmethod
+    def from_str(cls, lines: Union[str, List[str]], fname: str = None):
+        if isinstance(lines, str):
+            lines = lines.split("\n")
+
+        l = parse_lines(lines)
+        set_parents(l)
+
+        # If root absolute path is different from the given root,
+        # the dirname is considered parent
+        c0 = cls(l[0].value)
+        if c0.abs() != l[0].value:
+            dn = os.path.dirname(fname) if fname else None
+            c0.root = os.path.join(dn, l[0].value)
+
+        objs = [c0]
+        for x in l[1:]:
+            parent = objs[x.parent_line]
+            parent = x.callback(parent)
+            objs.append(parent)
+
+        return objs[0]
+
+    @classmethod
     def from_file(cls, *args: S, ensure_ext: bool = True):
         fname = args[0]
         if fname.endswith(".py"):
@@ -272,23 +299,13 @@ class Tree:
         with open(fname) as f:
             lines = f.readlines()
 
-        l = parse_lines(lines)
-        set_parents(l)
+        return cls.from_str(lines, fname=fname)
 
-        # If root absolute path is different from the given root,
-        # the dirname is considered parent
-        c0 = cls(l[0].value)
-        if c0.abs() != l[0].value:
-            c0.root = os.path.join(os.path.dirname(fname), l[0].value)
+    def to_file(self, *args: S, comment=None, ensure_ext: bool = True):
+        fname = args[0]
+        if fname.endswith(".py"):
+            fname = os.path.join(os.path.dirname(os.path.abspath(fname)), *args[1:])
 
-        objs = [c0]
-        for x in l[1:]:
-            parent = objs[x.parent_line]
-            parent = x.callback(parent)
-            objs.append(parent)
-        return objs[0]
-
-    def to_file(self, fname: S, comment=None, ensure_ext: bool = True):
         if ensure_ext:
             from treefiles import ensure_ext as ee
 
@@ -319,6 +336,16 @@ class Tree:
         for al, f in self.files.items():
             s += f"{' '*i}- {al}: {f}\n"
         return s.strip()
+
+    def get_files(self) -> List[str]:
+        all_files = []
+        for x in self.files.values():
+            all_files.append(self.path(x))
+        for x in self.dirs:
+            all_files.extend(x.get_files())
+        for x in self.ndirs.values():
+            all_files.extend(x.get_files())
+        return all_files
 
 
 def jTree(*args) -> T:
