@@ -3,7 +3,7 @@ import os
 import shutil
 from typing import TypeVar, List, Union, Optional, Callable
 
-from treefiles.tree_format import parse_lines, set_parents
+from treefiles.tree_format import parse_lines, set_parents, get_lines
 
 T = TypeVar("T", bound="Tree")
 S = TypeVar("S", bound="Str")
@@ -287,18 +287,7 @@ class Tree:
 
     @classmethod
     def from_file(cls, *args: S, ensure_ext: bool = True):
-        fname = args[0]
-        if fname.endswith(".py"):
-            fname = os.path.join(os.path.dirname(os.path.abspath(fname)), *args[1:])
-
-        if ensure_ext:
-            from treefiles import ensure_ext as ee
-
-            fname = ee(fname, "tree")
-
-        with open(fname) as f:
-            lines = f.readlines()
-
+        lines, fname = get_lines(*args, ensure_ext=ensure_ext)
         return cls.from_str(lines, fname=fname)
 
     def to_file(self, *args: S, comment=None, ensure_ext: bool = True):

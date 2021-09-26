@@ -67,7 +67,7 @@ def parse_lines(lines) -> List[Line]:
             x = x[: m.span()[0]] + os.environ[m.group(1)] + x[m.span()[1] :]
 
         # Read file or dir entry
-        if is_in(".", "-", ":", '<', x):
+        if is_in(".", "-", ":", "<", x):
             key, x = x[0], x[1:]
             if key == ".":
                 y.entry_type = "dir"
@@ -76,9 +76,14 @@ def parse_lines(lines) -> List[Line]:
                 y.entry_type = "file"
                 y.name, y.value = split_lin(x)
             elif key == "<":
-                y.entry_type = "import"
-                y.name, y.value = split_lin(x)
-                raise NotImplementedError("`<` not yet implemented")
+                name, value = split_lin(x)
+                import_lines, _ = get_lines(value)
+                new_branch = parse_lines(import_lines)
+                for x in new_branch:
+                    x.indent += y.indent
+                if name:
+                    new_branch[0].value = name
+                _lines.extend(new_branch)
 
         if y.entry_type:
             _lines.append(y)
@@ -100,3 +105,19 @@ def set_parents(lines):
                 k = i - j
                 break
         x.parent_line = k
+
+
+def get_lines(*args, ensure_ext: bool = True):
+    fname = args[0]
+    if fname.endswith(".py"):
+        fname = os.path.join(os.path.dirname(os.path.abspath(fname)), *args[1:])
+
+    if ensure_ext:
+        from treefiles import ensure_ext as ee
+
+        fname = ee(fname, "tree")
+
+    with open(fname) as f:
+        lines = f.readlines()
+
+    return lines, fname
