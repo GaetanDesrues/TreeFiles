@@ -267,7 +267,10 @@ class Tree:
         return c
 
     @classmethod
-    def from_str(cls, lines: Union[str, List[str]], fname: str = None):
+    def from_str(cls, lines: Union[str, List[str]], fname: str = None, **envs):
+        for k, v in envs.items():
+            os.environ[k] = str(v)
+
         if isinstance(lines, str):
             lines = lines.split("\n")
 
@@ -290,9 +293,9 @@ class Tree:
         return objs[0]
 
     @classmethod
-    def from_file(cls, *args: S, ensure_ext: bool = True):
+    def from_file(cls, *args: S, ensure_ext: bool = True, **envs):
         lines, fname = get_lines(*args, ensure_ext=ensure_ext)
-        return cls.from_str(lines, fname=fname)
+        return cls.from_str(lines, fname=fname, **envs)
 
     def to_file(self, *args: S, comment=None, ensure_ext: bool = True):
         fname = args[0]

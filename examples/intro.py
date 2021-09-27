@@ -2,9 +2,10 @@ import treefiles as tf
 
 
 def main():
-    out = tf.Tree.from_file(__file__, "my_tree.tree")
+    out = tf.Tree.from_file(__file__, "my_tree.tree", MY_DIR="env_dir")
     out.root = "/my/root"
     print(out)
+    print(out.ins)
 
     out = tf.Tree("/my-root")
     print(type(out), out.abs())

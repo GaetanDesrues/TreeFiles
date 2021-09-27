@@ -4,3 +4,5 @@
 	. folder_D
 		- nested_file: some_file.txt
 		- id2: some other (other) file.txt
+	. ${MY_DIR}
+		- ins: inside ${MY_DIR} folder
