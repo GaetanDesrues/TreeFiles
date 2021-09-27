@@ -63,7 +63,7 @@ class NotifyOar:
 
 def start_oar(
     runme_str,
-    logs_dir: [tf.Tree, str] = None,
+    logs_dir: Union[tf.Tree, str] = None,
     array_fname: str = None,
     wall_time: str = walltime(minutes=1),
     host: int = 1,

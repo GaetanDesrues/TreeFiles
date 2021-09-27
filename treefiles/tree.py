@@ -90,7 +90,7 @@ class Tree:
                 return
             return Str(os.path.join(self.abs(), self.files[att]))
         for d in self.dirs:
-            if d._name == att:
+            if d.root == att:
                 return d
         for d in self.dirs:
             found = getattr(d, att)
@@ -99,6 +99,10 @@ class Tree:
         for alias, d in self.ndirs.items():
             if alias == att:
                 return d
+        for d in self.ndirs.values():
+            found = getattr(d, att)
+            if found is not None:
+                return found
         if self.parent is None:
             raise AttributeError(f"Attribute {att!r} not found in {self._name}")
 
@@ -109,7 +113,7 @@ class Tree:
         :param i: recursion parameter
         """
         s = f"{self._name}"
-        if i == 2:
+        if i == 2 and self.abs() != self._name:
             s += f" ({self.abs()})"
         s += "\n"
         for al, f in self.files.items():
@@ -274,7 +278,7 @@ class Tree:
         # the dirname is considered parent
         c0 = cls(l[0].value)
         if c0.abs() != l[0].value:
-            dn = os.path.dirname(fname) if fname else None
+            dn = os.path.dirname(fname) if fname else ""
             c0.root = os.path.join(dn, l[0].value)
 
         objs = [c0]

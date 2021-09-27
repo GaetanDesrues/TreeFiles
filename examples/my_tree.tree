@@ -1,0 +1,7 @@
+.  # Main directory root
+	. folder_A
+		- a: b.vtk
+	. b: folder_B
+		- some_file.txt
+		- id: some other file.txt
+		< nested: my_nested_tree.tree

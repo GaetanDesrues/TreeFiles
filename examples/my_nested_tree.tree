@@ -1,0 +1,6 @@
+.
+	. folder_C
+		- b.vtk
+	. folder_D
+		- nested_file: some_file.txt
+		- id2: some other (other) file.txt

@@ -75,6 +75,15 @@ def get_logger(
 
 
 def get_csv_logger():
+    """
+    Calls a treefile logger formatted for files output, no colors but timestamps
+
+    .. code:: python
+
+        logging.basicConfig(level=logging.INFO)
+        log = get_csv_logger()
+
+    """
     return get_logger(default=False, handlers=[stream_csv_handler()])
 
 

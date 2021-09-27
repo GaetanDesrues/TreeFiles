@@ -182,7 +182,7 @@ def natural_sort(l: List[str]) -> List[str]:
     return sorted(l, key=alphanum_key)
 
 
-def listdir(root: [T, str]) -> List[S]:
+def listdir(root: Union[T, str]) -> List[S]:
     """
     Returns a list of files and folders in directory
     """
