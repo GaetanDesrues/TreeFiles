@@ -64,7 +64,8 @@ def parse_lines(lines) -> List[Line]:
         # Replace env variables
         while is_in("${", x):
             m = re.search(r"\${(\w+)}", x)
-            x = x[: m.span()[0]] + os.environ.get(m.group(1)) + x[m.span()[1] :]
+            d = f"{m.group(1)!r}NotFound"
+            x = x[: m.span()[0]] + os.environ.get(m.group(1), d) + x[m.span()[1] :]
 
         # Read file or dir entry
         if is_in(".", "-", ":", "<", x):
