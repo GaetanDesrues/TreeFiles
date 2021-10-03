@@ -173,7 +173,6 @@ def start_oar(
         log.debug(f"Find command in file://{cmd_fname}")
 
     if do_run:
-        print('gg', cmd)
         shell_output = subprocess.check_output(cmd)
         return shell_output.decode("utf-8")
     else:
