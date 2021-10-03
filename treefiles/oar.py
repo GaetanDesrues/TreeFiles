@@ -154,8 +154,8 @@ def start_oar(
     if runme_args is not None:
         oarcmd.extend(map(str, runme_args))
 
-    # cmd.append(f'{" ".join(oarcmd)}')
-    cmd.extend(oarcmd)
+    cmd.append(f'{" ".join(oarcmd)}')
+    # cmd.extend(oarcmd)
 
     if array_fname is not None:
         cmd.insert(1, "--array-param-file")
