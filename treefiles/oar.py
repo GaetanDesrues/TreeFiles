@@ -118,6 +118,7 @@ def start_oar(
     :return: The output of the oar command if `do_run` is True else the oar command
     """
     cmd = list(prgm)
+    cmd = [' '.join(cmd)]
 
     if job_name is not None:
         cmd.extend(["--name", f"{job_name}"])
