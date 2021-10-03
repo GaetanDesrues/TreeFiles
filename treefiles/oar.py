@@ -131,6 +131,9 @@ def start_oar(
         ]
     )
 
+    if array_fname:
+        cmd.extend(["--array-param-file", array_fname])
+
     if with_json:
         cmd.append("-J")
 
@@ -156,10 +159,6 @@ def start_oar(
 
     cmd.append(f'{" ".join(oarcmd)}')
     # cmd.extend(oarcmd)
-
-    if array_fname is not None:
-        cmd.insert(1, "--array-param-file")
-        cmd.insert(2, array_fname)
 
     if stdout is not None:
         cmd.extend([">", stdout])
