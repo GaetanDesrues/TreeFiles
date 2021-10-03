@@ -49,12 +49,19 @@ def load_yaml(fname: str, **kwargs):
         return yaml.load(f, **kwargs)
 
 
+if YAML:
+
+    class NoAliasDumper(yaml.SafeDumper):
+        def ignore_aliases(self, *_):
+            return True
+
+
 def dump_yaml(fname: str, data, **kwargs):
     """Dumps a dict to a yaml file with `yaml.dump`"""
     if not YAML:
         logging.error("You must install yaml")
     with open(fname, "w") as f:
-        kwargs.update({"Dumper": kwargs.get("Dumper", Dumper)})
+        kwargs.update({"Dumper": kwargs.get("Dumper", Dumper)})  # NoAliasDumper
         f.write(yaml.dump(data, **kwargs))
 
 

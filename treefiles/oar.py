@@ -1,7 +1,7 @@
 import datetime
 import logging
 import subprocess
-from typing import List, Union
+from typing import List, Union, Tuple
 
 import treefiles as tf
 
@@ -19,8 +19,8 @@ class Queue:
 
 
 class Program:
-    OARSUB = "oarsub"
-    OARCTL = "oarctl sub"
+    OARSUB = ("oarsub",)
+    OARCTL = ("oarctl", "sub")
 
 
 class NotifyOar:
@@ -75,7 +75,7 @@ def start_oar(
     do_run: bool = True,
     with_json: bool = False,
     notify: List = None,
-    prgm: str = Program.OARSUB,
+    prgm: Tuple[str] = Program.OARSUB,
     stdout: str = None,
     stderr: str = None,
 ) -> Union[str, List[str]]:
@@ -117,7 +117,7 @@ def start_oar(
     :param stderr: path for stderr, defaults to stdout if None
     :return: The output of the oar command if `do_run` is True else the oar command
     """
-    cmd = [prgm]
+    cmd = list(prgm)
 
     if job_name is not None:
         cmd.extend(["--name", f"{job_name}"])
@@ -154,7 +154,8 @@ def start_oar(
     if runme_args is not None:
         oarcmd.extend(map(str, runme_args))
 
-    cmd.append(f'{" ".join(oarcmd)}')
+    # cmd.append(f'{" ".join(oarcmd)}')
+    cmd.extend(oarcmd)
 
     if array_fname is not None:
         cmd.insert(1, "--array-param-file")

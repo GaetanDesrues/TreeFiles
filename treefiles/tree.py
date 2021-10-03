@@ -67,7 +67,7 @@ class Tree:
         return type(self)(os.sep.join(dirs[:-1]))
 
     def copy(self, root=None, parent=None):
-        c = type(self)(self.root if root is None else root)
+        c = type(self)(self.abs() if root is None else root)
         c.dirs = [x.copy(parent=c) for x in self.dirs]
         c.ndirs = {k: x.copy(parent=c) for k, x in self.ndirs.items()}
         c.files = dict(self.files)
