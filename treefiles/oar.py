@@ -155,7 +155,6 @@ def start_oar(
         oarcmd.extend(map(str, runme_args))
 
     cmd.append(f'{" ".join(oarcmd)}')
-    print('gg', cmd)
     # cmd.extend(oarcmd)
 
     if array_fname is not None:
@@ -174,6 +173,7 @@ def start_oar(
         log.debug(f"Find command in file://{cmd_fname}")
 
     if do_run:
+        print('gg', cmd)
         shell_output = subprocess.check_output(cmd)
         return shell_output.decode("utf-8")
     else:
