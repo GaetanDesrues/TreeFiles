@@ -49,6 +49,8 @@ from treefiles.commons import (
     dump_json,
     load_txt,
     dump_txt,
+    load_str,
+    dump_str,
     pprint_json,
     curDir,
     curDirs,

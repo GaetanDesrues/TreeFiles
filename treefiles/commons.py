@@ -88,6 +88,18 @@ def dump_json(filename: str, data, force_ext: bool = True, **kwargs):
         json.dump(data, f, **kwargs)
 
 
+def load_str(filename: str, method="read") -> str:
+    """Loads a file to string"""
+    with open(filename, "r") as f:
+        return getattr(f, method)()
+
+
+def dump_str(filename: str, data):
+    """Dumps `str(data)` to file"""
+    with open(filename, "w") as f:
+        f.write(str(data))
+
+
 def pprint_json(data: dict):
     """Returns a pretty printed dict"""
     return json.dumps(data, indent=4)
