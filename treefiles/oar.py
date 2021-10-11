@@ -153,13 +153,10 @@ def start_oar(
     if notify is not None:
         cmd.extend(notify)
 
-    cmd.append(runme_str)
-    # oarcmd = [runme_str]
+    oarcmd = [runme_str]
     if runme_args is not None:
-        cmd.extend(map(str, runme_args))
-
-    # cmd.append(f'{" ".join(oarcmd)}')
-    # cmd.extend(oarcmd)
+        oarcmd.extend(map(str, runme_args))
+    cmd.append(f'{" ".join(oarcmd)}')
 
     if stdout is not None:
         cmd.extend([">", stdout])
