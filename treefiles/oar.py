@@ -157,7 +157,7 @@ def start_oar(
     if runme_args is not None:
         oarcmd.extend(map(str, runme_args))
     _cmd = " ".join(oarcmd).replace("'", "")
-    cmd.append(f"'{_cmd}'")
+    cmd.append(_cmd)
 
     if stdout is not None:
         cmd.extend([">", stdout])
