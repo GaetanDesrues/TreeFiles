@@ -23,6 +23,10 @@ class Table:
     def add_row(self, *row):
         self.rows.append(row)
 
+    def replace_none(self, s=""):
+        g = lambda x: tf.none(x, s)
+        self.rows = [list(map(g, x)) for x in self.rows]
+
     def _find_template(self):
         if self.header is not None:
             n_cols = len(self.header)
@@ -63,6 +67,14 @@ class Table:
         for x in self._rows:
             s += self._tformat.format(*x)
         return s
+
+    @classmethod
+    def from_dict(cls, data, **kwargs):
+        c = cls(header=data.keys(), **kwargs)
+        n = len(next(iter(data.values())))
+        for i in range(n):
+            c.add_row(*[x[i] for x in data.values()])
+        return c
 
 
 ORIENT = dict(l="<", r=">", c="^")
