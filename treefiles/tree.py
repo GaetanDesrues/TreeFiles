@@ -197,6 +197,8 @@ class Tree:
 
         for d in self.dirs:
             d.dump()
+        for d in self.ndirs.values():
+            d.dump()
         os.makedirs(self.abs(), exist_ok=True)
         return self
 
@@ -408,3 +410,6 @@ class Str(str):
     @property
     def sibling(self) -> Callable:
         return self.parent.path
+
+    def join(self, x):
+        return Str(os.path.join(self, x))

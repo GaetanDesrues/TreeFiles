@@ -135,11 +135,13 @@ def move(arg: str, dest: str):
         shutil.move(f, dest)
 
 
-def copyfile(arg: str, dest: str):
+def copyfile(arg: str, dest: TS):
     """Copy a file in glob `arg` to `dest` with `shutil.copyfile`
 
     `dest` is a directory path, later joined with args' basenames
     """
+    if isinstance(dest, Tree):
+        dest = dest.abs()
     for f in glob.glob(arg):
         shutil.copyfile(f, join(dest, os.path.basename(f)))
 
