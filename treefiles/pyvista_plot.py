@@ -11,7 +11,7 @@ class PvPlot(pv.Plotter):
         self,
         theme="paraview",
         fname: str = None,
-        show: bool = True,
+        show: bool = True,  # prefer `off_screen=True`
         save: bool = None,
         transparent: bool = True,
         **kwargs,
@@ -33,6 +33,10 @@ class PvPlot(pv.Plotter):
         for x in meshes:
             if isinstance(x, (tuple, list)):
                 self.add_mesh(x[0], **x[1])
+            elif isinstance(x, dict):
+                assert "mesh" in x
+                x = dict(x)
+                self.add_mesh(x.pop("mesh"), **x)
             else:
                 self.add_mesh(x)
 
@@ -52,7 +56,7 @@ class PvPlot(pv.Plotter):
         self.close()
 
     def save(self, fname):
-        """ Give a filename to save the figure """
+        """Give a filename to save the figure"""
         self._fname = fname
         self._save = True
 

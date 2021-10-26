@@ -66,12 +66,16 @@ class Tree:
         dirs = self.abs().split(os.sep)
         return type(self)(os.sep.join(dirs[:-1]))
 
+    def copy_init_(self, obj, parent=None):
+        obj.dirs = [x.copy(parent=obj) for x in self.dirs]
+        obj.ndirs = {k: x.copy(parent=obj) for k, x in self.ndirs.items()}
+        obj.files = dict(self.files)
+        obj.parent = parent
+        obj.root = self.root
+
     def copy(self, root=None, parent=None):
         c = type(self)(self.abs() if root is None else root)
-        c.dirs = [x.copy(parent=c) for x in self.dirs]
-        c.ndirs = {k: x.copy(parent=c) for k, x in self.ndirs.items()}
-        c.files = dict(self.files)
-        c.parent = parent
+        self.copy_init_(c, parent)
         return c
 
     def __getattr__(self, att) -> Optional[TS]:
@@ -293,12 +297,18 @@ class Tree:
         return objs[0]
 
     @classmethod
-    def from_file(cls, *args: S, ensure_ext: bool = True, **envs):
+    def from_file(cls, *args: str, ensure_ext: bool = True, **envs):
         lines, fname = get_lines(*args, ensure_ext=ensure_ext)
         return cls.from_str(lines, fname=fname, **envs)
 
-    def to_file(self, *args: S, comment=None, ensure_ext: bool = True):
-        fname = args[0]
+    def to_file(self, *args: str, ensure_ext: bool = True, **pp_kws):
+        fname = args[0]  # Default
+
+        # If not absolute path, attach to self
+        if fname != os.path.abspath(fname):
+            fname = self.path(fname)
+
+        # Allow to_file(__file__, <dirs-to-join>, 'fname.tree')
         if fname.endswith(".py"):
             fname = os.path.join(os.path.dirname(os.path.abspath(fname)), *args[1:])
 
@@ -308,14 +318,15 @@ class Tree:
             fname = ee(fname, "tree")
 
         with open(fname, "w") as f:
-            f.write(self.pprint(comment=comment))
+            f.write(self.pprint(**pp_kws))
 
-    def pprint(self, comment=None, i=2):
+    def pprint(self, *, comment=None, i=2, oie: bool = False):
         """
         Export the current tree to file with the `tree` format
 
-        :param comment: File header
-        :param i: recursion parameter
+        comment: File header
+        i: recursion parameter
+        oie: only_if_exists
         """
         s = ""
         if i == 2:
@@ -324,16 +335,33 @@ class Tree:
                 for x in comment.split("\n"):
                     s += f"# {x}\n"
             s += ". "
+        else:
+            if oie and not os.path.isdir(self.abs()):
+                return None
         s += f"{self.root}\n"
         for d in self.dirs:
-            s += f"{' '*i}. {d.pprint(i=i+2)}\n"
+            if not oie or os.path.isdir(d.abs()):
+                s += f"{' '*i}. {d.pprint(i=i+2, oie=oie)}\n"
         for al, d in self.ndirs.items():
-            s += f"{' '*i}. {al}: {d.pprint(i=i+2)}\n"
+            if not oie or os.path.isdir(d.abs()):
+                s += f"{' '*i}. {al}: {d.pprint(i=i+2, oie=oie)}\n"
         for al, f in self.files.items():
-            s += f"{' '*i}- {al}: {f}\n"
+            if not oie or os.path.isfile(self.path(f)):
+                s += f"{' '*i}- {al}: {f}\n"
         return s.strip()
 
+    def prune(self):
+        """
+        Return a copy of self with only existing files remaining
+        """
+        c = Tree.from_str(self.pprint(oie=True))
+        c.copy_init_(self)
+        return self
+
     def get_files(self) -> List[str]:
+        """
+        Get a list of all files in the tree
+        """
         all_files = []
         for x in self.files.values():
             all_files.append(self.path(x))
@@ -341,6 +369,17 @@ class Tree:
             all_files.extend(x.get_files())
         for x in self.ndirs.values():
             all_files.extend(x.get_files())
+        return all_files
+
+    def get_file_keys(self) -> List[str]:
+        """
+        Get a list of all file keys in the tree
+        """
+        all_files = list(self.files.keys())
+        for x in self.dirs:
+            all_files.extend(x.get_file_keys())
+        for x in self.ndirs.values():
+            all_files.extend(x.get_file_keys())
         return all_files
 
 
