@@ -280,14 +280,15 @@ class Tree:
         if isinstance(lines, str):
             lines = lines.split("\n")
 
-        l = parse_lines(lines)
+        dn = os.path.dirname(fname) if fname else ""
+
+        l = parse_lines(lines, dirname=dn)
         set_parents(l)
 
         # If root absolute path is different from the given root,
         # the dirname is considered parent
         c0 = cls(l[0].value)
         if c0.abs() != l[0].value:
-            dn = os.path.dirname(fname) if fname else ""
             c0.root = os.path.join(dn, l[0].value)
 
         objs = [c0]

@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from dataclasses import dataclass
@@ -41,7 +42,7 @@ def split_lin(x):
     return name, value
 
 
-def parse_lines(lines) -> List[Line]:
+def parse_lines(lines, dirname=None) -> List[Line]:
     _lines = []
 
     def is_in(*x):
@@ -78,7 +79,7 @@ def parse_lines(lines) -> List[Line]:
                 y.name, y.value = split_lin(x)
             elif key == "<":
                 name, value = split_lin(x)
-                import_lines, _ = get_lines(value)
+                import_lines, _ = get_lines(value, dirname=dirname)
                 new_branch = parse_lines(import_lines)
                 for x in new_branch:
                     x.indent += y.indent
@@ -108,7 +109,7 @@ def set_parents(lines):
         x.parent_line = k
 
 
-def get_lines(*args, ensure_ext: bool = True):
+def get_lines(*args, ensure_ext: bool = True, dirname=None):
     fname = args[0]
     if fname.endswith(".py"):
         fname = os.path.join(os.path.dirname(os.path.abspath(fname)), *args[1:])
@@ -118,7 +119,15 @@ def get_lines(*args, ensure_ext: bool = True):
 
         fname = ee(fname, "tree")
 
+    if not os.path.isfile(fname) and dirname is not None:
+        fname = os.path.join(dirname, fname)
+        if not os.path.isfile(fname):
+            log.error(f"File {fname} not found")
+
     with open(fname) as f:
         lines = f.readlines()
 
     return lines, fname
+
+
+log = logging.getLogger(__name__)
