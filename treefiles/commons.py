@@ -190,8 +190,13 @@ def find_new_dir(temp: str, start=0):
     return temp.format(start)
 
 
-def greedy_download(fname: str, force: bool = False):
-    return not os.path.isfile(fname) or force
+def greedy_download(*fnames: str, force: bool = False):
+    if force:
+        return True
+    for x in fnames:
+        if not os.path.isfile(x):
+            return True
+    return False
 
 
 def natural_sort(l: List[str]) -> List[str]:

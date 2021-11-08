@@ -71,12 +71,28 @@ class Tree:
         obj.ndirs = {k: x.copy(parent=obj) for k, x in self.ndirs.items()}
         obj.files = dict(self.files)
         obj.parent = parent
-        obj.root = self.root
+        obj.root = self.abs()#root
+        return obj
 
     def copy(self, root=None, parent=None):
-        c = type(self)(self.abs() if root is None else root)
+        c = type(self)()
         self.copy_init_(c, parent)
+        if root is not None:
+            c.root = root
         return c
+
+    @classmethod
+    def from_copy(cls, obj: TS = None, parent: T = None):
+        if isinstance(obj, cls):
+            return obj.copy_init_(cls())
+        else:
+            return cls(obj, parent)
+
+    def f(self, idx):
+        """
+        Special copy with formatting of root
+        """
+        return self.copy(self.abs().f(idx))
 
     def __getattr__(self, att) -> Optional[TS]:
         """
@@ -412,5 +428,8 @@ class Str(str):
     def sibling(self) -> Callable:
         return self.parent.path
 
-    def join(self, x):
+    def join(self, x) -> S:
         return Str(os.path.join(self, x))
+
+    def isfile(self) -> bool:
+        return os.path.isfile(self)

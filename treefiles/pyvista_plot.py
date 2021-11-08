@@ -1,23 +1,41 @@
 import logging
 
 import pyvista as pv
-from MeshObject import Object
-
 import treefiles as tf
+from MeshObject import Object
+from pyvista import themes
+
+
+# Add callback to print camera position
+#  -->  p.add_key_event("c", lambda: print(p.camera_position))
+
+
+class Themes:
+    paraview = themes.ParaViewTheme()
+    doc = themes.DocumentTheme()
+
+    # test = themes.DefaultTheme()
+    # test.color = "black"
+    # test.show_edges = True
+    # test.edge_color = "k"
+    # test.background = "w"
+    # test.transparent_background = True
 
 
 class PvPlot(pv.Plotter):
+    T = Themes()
+
     def __init__(
         self,
-        theme="paraview",
+        theme=T.paraview,
         fname: str = None,
         show: bool = True,  # prefer `off_screen=True`
         save: bool = None,
         transparent: bool = True,
         **kwargs,
     ):
+        kwargs = {**kwargs, "theme": theme}
         super().__init__(**kwargs)
-        pv.set_plot_theme(theme)
 
         self._fname = fname
         self._save = fname is not None if save is None else save
@@ -45,7 +63,7 @@ class PvPlot(pv.Plotter):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self._fname is not None and self._save:
-            log.debug(f"Figure saved to {self._fname}")
+            log.debug(f"Figure saved to file://{self._fname}")
             self.screenshot(
                 filename=self._fname, transparent_background=self._transparent
             )
