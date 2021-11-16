@@ -26,6 +26,30 @@ class SimpleFormatter(logging.Formatter):
         return formatter.format(record)
 
 
+class HtmlFormatter(logging.Formatter):
+    reset = "</font>"
+    fmt = "{col}[%(levelname)s]{reset} [{origin}] %(message)s<br>"
+    origin = "%(name)s (%(funcName)s)"
+
+    FORMATS = {
+        logging.DEBUG: '<font color="Grey">',
+        logging.INFO: '<b><font color="Green">',
+        logging.WARNING: '<font color="Orange">',
+        logging.ERROR: '<font color="Red">',
+        logging.CRITICAL: '<b><font color="Red">',
+    }
+
+    def format(self, record):
+        col = self.FORMATS.get(record.levelno, self.reset)
+        log_fmt = self.fmt.format(
+            col=col,
+            reset=f"{self.reset}</b>" if "<b>" in col else self.reset,
+            origin=self.origin,
+        )
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record).replace("\n", "<br>")
+
+
 class CSVFormatter(logging.Formatter):
     def __init__(self, formats=None, sep=", ", **kw):
         super().__init__(**kw)

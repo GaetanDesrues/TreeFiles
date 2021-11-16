@@ -71,7 +71,7 @@ class Tree:
         obj.ndirs = {k: x.copy(parent=obj) for k, x in self.ndirs.items()}
         obj.files = dict(self.files)
         obj.parent = parent
-        obj.root = self.abs()#root
+        obj.root = self.root  # self.abs()
         return obj
 
     def copy(self, root=None, parent=None):
@@ -425,6 +425,10 @@ class Str(str):
         return Tree(os.path.dirname(os.path.abspath(self)))
 
     @property
+    def basename(self) -> S:
+        return os.path.basename(self)
+
+    @property
     def sibling(self) -> Callable:
         return self.parent.path
 
@@ -433,3 +437,6 @@ class Str(str):
 
     def isfile(self) -> bool:
         return os.path.isfile(self)
+
+    def isdir(self) -> bool:
+        return os.path.isdir(self)

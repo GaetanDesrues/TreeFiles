@@ -41,7 +41,7 @@ try:
 except ImportError:
     pass
 else:
-    from treefiles.np import NumpyEncoder
+    from treefiles.np import NumpyEncoder, NpArray
 
 
 from treefiles.commons import (
@@ -81,6 +81,7 @@ from treefiles.commons import (
     get_iterable,
     print_link,
     print_link_to_obj,
+    unique,
 )
 
 

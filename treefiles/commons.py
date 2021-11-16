@@ -204,7 +204,7 @@ def natural_sort(l: List[str]) -> List[str]:
     Sorts a list of paths in a natural way
     """
     convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split("(\d+)", key)]
+    alphanum_key = lambda key: [convert(c) for c in re.split(r"(\d+)", key)]
     return sorted(l, key=alphanum_key)
 
 
@@ -374,3 +374,14 @@ def print_link_to_obj(obj):
     file = inspect.getfile(obj)
     line = inspect.getsourcelines(obj)[1]
     return print_link(file=file, line=line)
+
+
+def unique(x: List):
+    """
+    Return a copy of x with copies removed
+    """
+    z = []
+    for y in x:
+        if not y in z:
+            z.append(y)
+    return z
