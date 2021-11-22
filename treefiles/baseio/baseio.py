@@ -39,8 +39,9 @@ class BaseIO:
 
     def __repr__(self):
         v = str(self.value)
+        s = "..." if len(v) > 50 else ""
         v = v[: min(50, len(v))]
-        return f"<{self._class_name}.{self.name}={v}>"
+        return f"<{self._class_name}.{self.name}={v}{s}>"
 
     def to_dict(self) -> dict:
         return {k: getattr(self, k) for k in self.registered}

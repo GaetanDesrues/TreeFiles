@@ -417,6 +417,8 @@ def fTree(file: str, *args: str, dump: bool = False, clean: bool = False) -> T:
 
 class Str(str):
     def __new__(cls, value):
+        if isinstance(value, Tree):
+            value = value.abs()
         obj = str.__new__(cls, value)
         return obj
 
