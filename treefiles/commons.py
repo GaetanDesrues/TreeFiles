@@ -346,10 +346,12 @@ def get_iterable(x):
     """Ensure x is iterable"""
     from collections.abc import Iterable
 
-    if isinstance(x, Iterable):
+    if isinstance(x, str):
+        return (x,)
+    elif isinstance(x, Iterable):
         return x
     else:
-        return [x]
+        return (x,)
 
 
 def print_link(file=None, line=None):

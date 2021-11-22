@@ -11,6 +11,8 @@ from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
 from treefiles.pyplot import get_color_cycle, despine, move_legend
 from treefiles.functions import beta_
+from treefiles.baseio.baseio import TValue, BaseIO, Bases
+from treefiles.baseio.param import Param, Params, TParams
 
 
 def br():

@@ -147,6 +147,9 @@ class Tree:
             s += f"{' '*i}\u2514 [{al}] {d.__repr__(i+2)}\n"
         return s.rstrip()
 
+    def isdir(self) -> bool:
+        return os.path.isdir(self.abs())
+
     def dir(self, *names: str, **named_dirs: str) -> T:
         """
         Adds directories to the current level
@@ -432,8 +435,8 @@ class Str(str):
     def sibling(self) -> Callable:
         return self.parent.path
 
-    def join(self, x) -> S:
-        return Str(os.path.join(self, x))
+    def join(self, *x) -> S:
+        return Str(os.path.join(self, *x))
 
     def isfile(self) -> bool:
         return os.path.isfile(self)
