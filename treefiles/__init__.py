@@ -8,11 +8,17 @@ from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
-from treefiles.baseio.baseio import TValue, BaseIO, Bases
-from treefiles.baseio.param import Param, Params, TParams
 
 
 f = fTree
+
+
+try:
+    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases
+    from treefiles.baseio_.param import Param, Params, TParams
+except ImportError:
+    pass
+
 
 try:
     from tqdm import tqdm
