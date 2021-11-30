@@ -4,8 +4,10 @@ import inspect
 import json
 import logging
 import os
+import random
 import re
 import shutil
+import string
 import sys
 from os.path import join, isfile, basename, isdir
 from typing import List, Union
@@ -171,16 +173,14 @@ def dump_txt(fname: str, data, delimiter=" "):
     fname = ensure_ext(fname, "txt")
     with open(fname, "w") as f:
         for line in data:
-            f.write(str(delimiter).join(map(str, line)) + "\n")
+            f.write(str(delimiter).join(map(str, get_iterable(line))) + "\n")
 
 
 def load_txt(fname: str, delimiter=" "):
     fname = ensure_ext(fname, "txt")
     with open(fname, "r") as f:
-        data = f.read().split("\n")
-    while data[-1] == "":
-        data = data[:-1]
-    return list(map(lambda x: x.rstrip().split(delimiter), data))
+        data = f.readlines()
+    return [x.rstrip().split(delimiter) if delimiter in x else x.rstrip() for x in data]
 
 
 def find_new_dir(temp: str, start=0):
@@ -387,3 +387,11 @@ def unique(x: List):
         if not y in z:
             z.append(y)
     return z
+
+
+def is_abs(path: TS) -> bool:
+    return Tree(path).abs() == path
+
+
+def get_string(size=6, chars=string.ascii_uppercase + string.digits):
+    return "".join(random.choice(chars) for _ in range(size))

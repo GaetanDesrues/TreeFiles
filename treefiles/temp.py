@@ -12,6 +12,10 @@ def rand(k=8):
     return "".join(random.choices(string.ascii_uppercase + string.digits, k=k))
 
 
+def tmp_():
+    return tf.Tree(tempfile.gettempdir())
+
+
 class TmpDir:
     def __init__(self, root=tempfile.gettempdir()):
         self.root = tf.Tree(root)

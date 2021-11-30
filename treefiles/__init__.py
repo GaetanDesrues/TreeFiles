@@ -1,23 +1,18 @@
 from treefiles.tree import Tree, jTree, fTree, Str, S, T, TS
 from treefiles.decorators import debug, timer
 from treefiles.pdf import PDFMerger
-from treefiles.splot import SimplePlot as SPlot
 from treefiles.logs import get_logger, stream_csv_handler, get_csv_logger
 from treefiles.oar import start_oar, walltime, NotifyOar, Queue, Program
-from treefiles.temp import TmpDir, TmpFile
+from treefiles.temp import TmpDir, TmpFile, tmp_
 from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
-from treefiles.pyplot import get_color_cycle, despine, move_legend
-from treefiles.functions import beta_
 from treefiles.baseio.baseio import TValue, BaseIO, Bases
 from treefiles.baseio.param import Param, Params, TParams
 
 
-def br():
-    breakpoint()
-
+f = fTree
 
 try:
     from tqdm import tqdm
@@ -28,6 +23,9 @@ try:
     import matplotlib.pyplot as plt
 except ImportError:
     pass
+else:
+    from treefiles.pyplot import get_color_cycle, despine, move_legend
+    from treefiles.splot import SimplePlot as SPlot, APlot
 
 try:
     import pyvista as pv
@@ -44,6 +42,7 @@ except ImportError:
     pass
 else:
     from treefiles.np import NumpyEncoder, NpArray
+    from treefiles.functions import beta_, minmax_
 
 
 from treefiles.commons import (
@@ -84,6 +83,8 @@ from treefiles.commons import (
     print_link,
     print_link_to_obj,
     unique,
+    is_abs,
+    get_string,
 )
 
 

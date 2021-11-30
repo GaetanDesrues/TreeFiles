@@ -404,6 +404,9 @@ class Tree:
             all_files.extend(x.get_file_keys())
         return all_files
 
+    def __truediv__(self, other):
+        return self.path(other)
+
 
 def jTree(*args) -> T:
     from treefiles.commons import join
@@ -445,3 +448,6 @@ class Str(str):
 
     def isdir(self) -> bool:
         return os.path.isdir(self)
+
+    def __truediv__(self, other):
+        return self.join(other)
