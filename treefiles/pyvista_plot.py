@@ -29,12 +29,14 @@ class PvPlot(pv.Plotter):
         self,
         theme=T.paraview,
         fname: str = None,
-        show: bool = True,  # prefer `off_screen=True`
+        show: bool = True,
         save: bool = None,
         transparent: bool = True,
         **kwargs,
     ):
         kwargs = {**kwargs, "theme": theme}
+        if not show:
+            kwargs.update({"off_screen": True})
         super().__init__(**kwargs)
 
         self._fname = fname
@@ -63,10 +65,13 @@ class PvPlot(pv.Plotter):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self._fname is not None and self._save:
-            log.debug(f"Figure saved to file://{self._fname}")
+            if self._show:
+                self._on_first_render_request()
+                self.render()
             self.screenshot(
                 filename=self._fname, transparent_background=self._transparent
             )
+            log.debug(f"Figure saved to file://{self._fname}")
 
         if self._show:
             self.show()
