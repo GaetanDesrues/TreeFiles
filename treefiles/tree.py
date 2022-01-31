@@ -451,3 +451,6 @@ class Str(str):
 
     def __truediv__(self, other):
         return self.join(other)
+
+    def glob(self, pattern: str) -> List[S]:
+        return Tree(self).glob(pattern)

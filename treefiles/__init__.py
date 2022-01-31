@@ -14,7 +14,7 @@ f = fTree
 
 
 try:
-    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases
+    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder
     from treefiles.baseio_.param import Param, Params, TParams
 except ImportError:
     pass
@@ -39,7 +39,7 @@ try:
 except ImportError:
     pass
 else:
-    from treefiles.pyvista_plot import PvPlot
+    from treefiles.pyvista_plot import PvPlot, Themes
 
 
 try:

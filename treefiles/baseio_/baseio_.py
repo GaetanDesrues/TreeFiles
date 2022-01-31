@@ -96,6 +96,41 @@ class Bases(Dict[str, BaseIO]):
         return self
 
     def __init__(self, *items: Union[T, List[T], Bases, dict]):
+        # # if len(items)>0:
+        # #     breakpoint()
+        # def l_(x):
+        #     if isinstance(x, BaseIO):
+        #         return x
+        #     elif isinstance(x, dict):
+        #         return self.inner_class.from_dict(x)
+        #     else:
+        #         breakpoint()
+        #
+        # its = []
+        # for z in get_iterable(items):
+        #     if isinstance(z, dict):
+        #         z = [z]
+        #     for x in get_iterable(z):
+        #         if isinstance(x, dict):
+        #             y = next(iter(x.values()))
+        #             if isinstance(y, BaseIO):
+        #                 its.extend(l_(k) for k in l_(x.values()))
+        #         else:
+        #             its.append(l_(x))
+        # # if len(its) > 0:
+        # #     breakpoint()
+        # items = its
+        # # items = [l_(x) for z in get_iterable(items) for x in get_iterable(z)]
+        # # print(x)
+        # # if isinstance(x, dict):
+        # #     y = next(iter(x.values()))
+        # #     if isinstance(y, BaseIO):
+        # #         items = list(x.values())
+        # #     # else:
+        # #     elif isinstance(y, dict):
+        # #
+        # #     else:
+        # #     #     breakpoint()
         ln = len(items)
         if ln > 0:
             if ln == 1:

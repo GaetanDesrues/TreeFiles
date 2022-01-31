@@ -286,7 +286,7 @@ def insert_before(src: str, sub: str, data) -> str:
     long_filename_newfile.mha
     """
     i = src.find(sub)
-    return f"{src[:i]}{data}{src[i:]}"
+    return Str(f"{src[:i]}{data}{src[i:]}")
 
 
 def flatten_dict(d, parent_key="", sep="_"):
