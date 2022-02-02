@@ -83,6 +83,24 @@ class PvPlot(pv.Plotter):
         self._fname = fname
         self._save = True
 
+    def label_point(self, p, label, **kwargs):
+        poly = pv.PolyData([p])
+        poly["txt"] = [label]
+        self.add_point_labels(
+            poly,
+            "txt",
+            point_size=20,
+            font_size=36,
+            render_points_as_spheres=True,
+            **kwargs,
+        )
+
+    def vector(self, p, vec):
+        poly = pv.PolyData([p])
+        poly["vec"] = [vec]
+        poly.set_active_vectors("vec")
+        self.add_mesh(poly.arrows)
+
 
 log = logging.getLogger(__name__)
 
