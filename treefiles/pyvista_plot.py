@@ -1,8 +1,9 @@
 import logging
 
+import numpy as np
 import pyvista as pv
 import treefiles as tf
-from MeshObject import Object
+from MeshObject import Mesh
 from pyvista import themes
 
 
@@ -44,8 +45,8 @@ class PvPlot(pv.Plotter):
         self._show = show
         self._transparent = transparent
 
-    def add_mesh(self, mesh, **kwargs):
-        if isinstance(mesh, Object):
+    def add_mesh(self, mesh: Mesh, **kwargs):
+        if isinstance(mesh, Mesh):
             mesh = pv.wrap(mesh.data)
         super().add_mesh(mesh, **kwargs)
 
@@ -101,6 +102,14 @@ class PvPlot(pv.Plotter):
         poly.set_active_vectors("vec")
         self.add_mesh(poly.arrows)
 
+    def add_pts(self, pts, c=None, s=20, **kw):
+        m = pv.PolyData(pts)
+        if isinstance(c, (list, np.ndarray)):
+            m["c"] = c
+            c = None
+            kw["scalars"] = "c"
+        self.add_mesh(m, render_points_as_spheres=True, point_size=s, color=c, **kw)
+
 
 log = logging.getLogger(__name__)
 
@@ -109,7 +118,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     log = tf.get_logger()
 
-    m = Object.Sphere()
+    m = Mesh.Sphere()
     m2 = m.copy()
     m2.transform(translate=[2, 0, 0])
 
