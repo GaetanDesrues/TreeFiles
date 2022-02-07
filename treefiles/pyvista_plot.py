@@ -47,7 +47,7 @@ class PvPlot(pv.Plotter):
 
     def add_mesh(self, mesh: Mesh, **kwargs):
         if isinstance(mesh, Mesh):
-            mesh = pv.wrap(mesh.data)
+            mesh = mesh.pv
         super().add_mesh(mesh, **kwargs)
 
     def add_meshes(self, meshes):
