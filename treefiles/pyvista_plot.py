@@ -47,8 +47,16 @@ class PvPlot(pv.Plotter):
 
     def add_mesh(self, mesh: Mesh, **kwargs):
         if isinstance(mesh, Mesh):
+            if mesh.nbCells == 0:
+                return self.add_pts(mesh.pts, **kwargs)
             mesh = mesh.pv
-        super().add_mesh(mesh, **kwargs)
+
+        v = kwargs.pop("vectors", None)
+        if v:
+            mesh.set_active_vectors(v)
+            super().add_mesh(mesh.arrows, **kwargs)
+        else:
+            super().add_mesh(mesh, **kwargs)
 
     def add_meshes(self, meshes):
         for x in meshes:
@@ -103,6 +111,9 @@ class PvPlot(pv.Plotter):
         self.add_mesh(poly.arrows)
 
     def add_pts(self, pts, c=None, s=20, **kw):
+        # if isinstance(pts, Mesh):
+        #     log.warning("Calling 'add_pts' on a Mesh")
+        #     return self.add_mesh(pts, color=c, **kw)
         m = pv.PolyData(pts)
         if isinstance(c, (list, np.ndarray)):
             m["c"] = c
