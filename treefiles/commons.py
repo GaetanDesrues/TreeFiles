@@ -9,6 +9,7 @@ import re
 import shutil
 import string
 import sys
+import time
 from os.path import join, isfile, basename, isdir
 from typing import List, Union
 from zipfile import ZipFile
@@ -395,3 +396,36 @@ def is_abs(path: TS) -> bool:
 
 def get_string(size=6, chars=string.ascii_uppercase + string.digits):
     return "".join(random.choice(chars) for _ in range(size))
+
+
+def copy_tree(src, dst, dirs_exist_ok=True, **kw):
+    if isinstance(src, Tree):
+        src = src.abs()
+    if isinstance(dst, Tree):
+        dst = dst.abs()
+    return shutil.copytree(src, dst, dirs_exist_ok=dirs_exist_ok, **kw)
+
+
+def dump(dst: TS) -> T:
+    return Tree(dst).dump()
+
+
+class Timer:
+    """
+    with Timer() as t:
+        time.sleep(1.46)
+    print(t.secs)  # 1.460746487020515
+    """
+
+    def __enter__(self):
+        self.start_time = time.perf_counter()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        end_time = time.perf_counter()
+        self.secs = end_time - self.start_time  # seconds
+
+
+def logf(fname):
+    fname = Str(fname)
+    logging.info(f"Wrote {fname.basename!r} to file://{fname.parent}")

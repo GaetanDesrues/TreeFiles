@@ -93,7 +93,8 @@ class Bases(Dict[str, BaseIO]):
     def add(self, *args, **kwargs):
         c = self.inner_class(*args, **kwargs)
         self[c.name] = c
-        return self
+        # return self
+        return self[c.name]
 
     def __init__(self, *items: Union[T, List[T], Bases, dict]):
         # # if len(items)>0:
@@ -139,6 +140,13 @@ class Bases(Dict[str, BaseIO]):
                     items = [x]
                 elif len(x) == 0:
                     items = []
+                elif isinstance(x, list):
+                    items = []
+                    for z in x:
+                        if isinstance(z, dict):
+                            items.append(self.inner_class.from_dict(z))
+                        else:
+                            items.append(z)
                 elif isinstance(x, dict):
                     y = list(x.values())[0]
                     if isinstance(y, BaseIO):

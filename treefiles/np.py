@@ -57,3 +57,23 @@ class NpArray(np.ndarray):
             return obj[()]  # if ufunc output is scalar, return it
         else:
             return np.ndarray.__array_wrap__(self, obj)
+
+
+def normalize(vec):
+    return np.array(vec) / np.linalg.norm(vec)
+
+
+def project_vector_on_vector(v1, v2):
+    """
+    Project v1 on v2
+    """
+    v1, v2 = np.array(v1), np.array(v2)
+    return np.dot(v1, v2) * v2 / np.linalg.norm(v2)
+
+
+def project_vector_on_plane(v, n):
+    """
+    Project vector v on plane with normal vector n
+    """
+    v, n = np.array(v), np.array(n)
+    return v - project_vector_on_vector(v, n)

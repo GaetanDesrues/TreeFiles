@@ -37,10 +37,13 @@ class Params(Bases[str, Param]):
 
 
 def r(x, k=2):
-    if isinstance(x, str):
-        return x
-    elif isinstance(x, (int, float)):
-        return round(x, k)
+    if x is None:
+        return
+    try:
+        y = round(x, k)
+    except:
+        y = x
+    return y
 
 
 TParams = Union[List[Param], Params]

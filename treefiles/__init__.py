@@ -47,7 +47,13 @@ try:
 except ImportError:
     pass
 else:
-    from treefiles.np import NumpyEncoder, NpArray
+    from treefiles.np import (
+        NumpyEncoder,
+        NpArray,
+        normalize,
+        project_vector_on_vector,
+        project_vector_on_plane,
+    )
     from treefiles.functions import beta_, minmax_
 
 
@@ -91,6 +97,10 @@ from treefiles.commons import (
     unique,
     is_abs,
     get_string,
+    copy_tree,
+    dump,
+    Timer,
+    logf,
 )
 
 

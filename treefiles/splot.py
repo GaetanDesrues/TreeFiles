@@ -28,7 +28,7 @@ class SimplePlot:
         fig = plt.gcf()
 
         if self._fname is not None and self._save:
-            fig.savefig(self._fname)
+            fig.savefig(self._fname, bbox_inches='tight')
 
         if self._show:
             plt.show()
