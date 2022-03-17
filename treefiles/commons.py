@@ -100,7 +100,7 @@ def load_str(filename: str, method="read") -> str:
 def dump_str(filename: str, data):
     """Dumps `str(data)` to file"""
     with open(filename, "w") as f:
-        f.write(str(data))
+        f.write(str(data))  # .encode("utf-8")
 
 
 def pprint_json(data: dict):
@@ -406,8 +406,8 @@ def copy_tree(src, dst, dirs_exist_ok=True, **kw):
     return shutil.copytree(src, dst, dirs_exist_ok=dirs_exist_ok, **kw)
 
 
-def dump(dst: TS) -> T:
-    return Tree(dst).dump()
+def dump(dst: TS, clean: bool = False) -> T:
+    return Tree(dst).dump(clean)
 
 
 class Timer:
@@ -429,3 +429,18 @@ class Timer:
 def logf(fname):
     fname = Str(fname)
     logging.info(f"Wrote {fname.basename!r} to file://{fname.parent}")
+
+
+def breaklines(x: str, k: int = 50, bc: str = "\n"):
+    """Will return a copy of the string x with breaklines
+    between words if line lenght is greater than k"""
+    x = str(none(x, ""))
+    x_ = x.split()
+    groups = [""]
+    for y in x_:
+        if len(groups[-1]) + len(y) < k:
+            groups[-1] += " " + y
+        else:
+            groups.append(y)
+    groups[0] = groups[0][1:]
+    return bc.join(groups)
