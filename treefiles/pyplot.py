@@ -26,6 +26,10 @@ def get_color_cycle():
     return cycler.by_key()["color"] if "color" in cycler.keys else [".15"]
 
 
+# ax.tick_params(
+#     axis="x", which="both", bottom=False, top=False, labelbottom=False
+# )
+
 def despine(
     fig=None,
     ax=None,

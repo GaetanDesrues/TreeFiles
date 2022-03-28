@@ -35,6 +35,9 @@ class Params(Bases[str, Param]):
     def bounds(self):
         return [x.bounds for x in self.values()]
 
+    @classmethod
+    def from_dict(cls, d):
+        return cls([cls.inner_class(k, v) for k, v in d.items()])
 
 def r(x, k=2):
     if x is None:
