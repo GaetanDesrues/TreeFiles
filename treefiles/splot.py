@@ -6,6 +6,13 @@ class SimplePlot:
     """
     Cleanly plot a figure with matplotlib.pyplot
     fig, ax = plt.subplots()
+
+        with tf.SPlot():
+            fig, ax = plt.subplots()
+            tf.despine()
+            ax.plot()
+            fig.tight_layout()
+
     """
 
     def __init__(self, fname: str = None, show: bool = True, save: bool = None):

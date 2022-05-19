@@ -114,3 +114,7 @@ DEBUG = False
 def set_debug(active: bool = True):
     global DEBUG
     DEBUG = active
+
+
+def rge(arr):
+    return np.min(arr), np.max(arr)

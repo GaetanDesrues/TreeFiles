@@ -23,6 +23,8 @@ class Param(BaseIO):
 
 
 class Params(Bases[str, Param]):
+    inner_class = Param
+    
     def build_table(self) -> Tuple[Bases.THeader, Bases.TData]:
         header = ["Name", "Baseline", "Value", "Bounds", "Unit"]
         data = [

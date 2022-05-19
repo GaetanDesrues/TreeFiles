@@ -84,11 +84,13 @@ class IOEncoder(NumpyEncoder):
 
 class Bases(Dict[str, BaseIO]):
     __orig_bases__ = None
+    inner_class = BaseIO  # python < 3.9
 
-    @classmethod
-    @property
-    def inner_class(cls):
-        return get_args(cls.__orig_bases__[0])[1]
+    # python >= 3.9:
+    # @classmethod
+    # @property
+    # def inner_class(cls):
+    #     return get_args(cls.__orig_bases__[0])[1]
 
     def add(self, *args, **kwargs):
         c = self.inner_class(*args, **kwargs)
