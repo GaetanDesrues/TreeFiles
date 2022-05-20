@@ -82,7 +82,8 @@ class IOEncoder(NumpyEncoder):
         return super().default(obj)
 
 
-class Bases(Dict[str, BaseIO]):
+# class Bases(Dict[str, BaseIO]):  # python >= 3.9
+class Bases(dict):
     __orig_bases__ = None
     inner_class = BaseIO  # python < 3.9
 

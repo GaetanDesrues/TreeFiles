@@ -22,8 +22,9 @@ class Param(BaseIO):
         return Params(self).table
 
 
-class Params(Bases[str, Param]):
-    inner_class = Param
+# class Params(Bases[str, Param]):  # python >= 3.9
+class Params(Bases):
+    inner_class = Param  # python < 3.9
     
     def build_table(self) -> Tuple[Bases.THeader, Bases.TData]:
         header = ["Name", "Baseline", "Value", "Bounds", "Unit"]
