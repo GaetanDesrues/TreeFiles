@@ -12,6 +12,11 @@ from treefiles.poolception import NestablePool
 
 f = fTree
 
+try:
+    from munch import munchify
+except ImportError:
+    pass
+
 
 try:
     from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder
