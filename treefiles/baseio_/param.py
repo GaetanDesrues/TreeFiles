@@ -1,6 +1,7 @@
 import logging
 from typing import Tuple, List, Union
 
+from treefiles import Str
 from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases
 
 _Bounds = Tuple[TValue, TValue]
@@ -21,11 +22,14 @@ class Param(BaseIO):
     def table(self):
         return Params(self).table
 
+    def __truediv__(self, other):
+        return Str(Str(self.value) / other)
+
 
 # class Params(Bases[str, Param]):  # python >= 3.9
 class Params(Bases):
     inner_class = Param  # python < 3.9
-    
+
     def build_table(self) -> Tuple[Bases.THeader, Bases.TData]:
         header = ["Name", "Baseline", "Value", "Bounds", "Unit"]
         data = [
@@ -41,6 +45,7 @@ class Params(Bases):
     @classmethod
     def from_dict(cls, d):
         return cls([cls.inner_class(k, v) for k, v in d.items()])
+
 
 def r(x, k=2):
     if x is None:

@@ -70,7 +70,7 @@ class Table:
 
     @classmethod
     def from_dict(cls, data, **kwargs):
-        c = cls(header=data.keys(), **kwargs)
+        c = cls(header=list(data.keys()), **kwargs)
         n = len(next(iter(data.values())))
         for i in range(n):
             c.add_row(*[x[i] for x in data.values()])
