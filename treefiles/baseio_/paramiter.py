@@ -6,6 +6,11 @@ import treefiles as tf
 from smt.sampling_methods import LHS
 
 
+"""
+See example: https://github.com/GaetanDesrues/TreeFiles/blob/master/examples/example_params.ipynb
+"""
+
+
 class ParamIter:
     """
     Class intended to provide methods to iterate over several sets
