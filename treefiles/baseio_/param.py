@@ -25,6 +25,18 @@ class Param(BaseIO):
     def __truediv__(self, other):
         return Str(Str(self.value) / other)
 
+    def __call__(self, value=None, **kwargs):
+        self.value = value
+        for k, v in kwargs.items():
+            if k in self.registered:
+                setattr(self, k, v)
+        return self
+
+    def __eq__(self, other):
+        if isinstance(other, Param):
+            return self.value == other.value
+        return self.value == other
+
 
 # class Params(Bases[str, Param]):  # python >= 3.9
 class Params(Bases):
