@@ -184,7 +184,9 @@ class Bases(dict):
     def build_table(self) -> Tuple[THeader, TData]:
         raise NotImplementedError
 
-    def assign(self, values: Union[np.ndarray, List[TValue]], att: str = "value"):
+    def assign(
+        self, values, att: str = "value"
+    ):  # : Union[np.ndarray, List[TValue], Tuple[TValue]]
         cop = self.copy()
         for x, v in zip(cop.values(), values):
             setattr(x, att, v)

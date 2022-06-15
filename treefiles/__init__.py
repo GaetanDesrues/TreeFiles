@@ -21,7 +21,13 @@ except ImportError:
 try:
     from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder
     from treefiles.baseio_.param import Param, Params, TParams
-    from treefiles.baseio_.paramiter import ParamIter, LinearIter, LinearOneAtATimeIter, LHSParamIter
+    from treefiles.baseio_.paramiter import (
+        ParamIter,
+        LinearIter,
+        LinearOneAtATimeIter,
+        LHSParamIter,
+        RandomSamplingParamIter,
+    )
 except ImportError:
     pass
 

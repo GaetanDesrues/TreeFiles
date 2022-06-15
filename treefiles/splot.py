@@ -9,7 +9,7 @@ class SimplePlot:
 
         with tf.SPlot():
             fig, ax = plt.subplots()
-            tf.despine()
+            tf.despine(fig)
             ax.plot()
             fig.tight_layout()
 

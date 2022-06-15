@@ -3,7 +3,7 @@ from typing import Union, List
 
 import numpy as np
 import treefiles as tf
-from smt.sampling_methods import LHS
+from smt.sampling_methods import LHS, Random
 
 
 """
@@ -139,6 +139,30 @@ class LHSParamIter(ParamIter):
             yield d
 
 
+class RandomSamplingParamIter(ParamIter):
+    """
+    Uniform sampling
+    """
+
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        ps = tf.Params(self.params)
+        sampling = Random(xlimits=np.array(ps.bounds))
+        self.params = [ps.assign(x).values() for x in sampling(self.n)]
+
+    def __len__(self):
+        return self.n
+
+    @property
+    def gen(self):
+        for x in self.params:
+            d = self.defaults.copy()
+            for y in tf.get_iterable(x):
+                d.setdefault(y.name, y)
+                d[y.name].value = y.value
+            yield d
+
+
 log = logging.getLogger(__name__)
 
 if __name__ == "__main__":
@@ -174,5 +198,12 @@ if __name__ == "__main__":
     defs = [tf.Param("patient_id", 12)]
     it = LHSParamIter(coef_V3, apd, n=3, defaults=defs)
     log.info(f"LHSParamIter ({len(it)})")
+    for i, x in enumerate(it.gen):
+        print(x.table())
+
+    # RandomSamplingParamIter
+    defs = [tf.Param("patient_id", 12)]
+    it = RandomSamplingParamIter(coef_V3, apd, n=3, defaults=defs)
+    log.info(f"RandomSamplingParamIter ({len(it)})")
     for i, x in enumerate(it.gen):
         print(x.table())
