@@ -19,11 +19,15 @@ class BaseIO:
     def __init__(
         self, name: str, value: TValue = None, pretty_name: str = None, unit: str = None
     ):
+        # if isinstance(name, type(self)):
+        #     self.registered = name.registered
+        #     for x in self.registered:
+        #         setattr(self, x, getattr(name, x))
+        # else:
         self.name = name
         self.pretty_name = pretty_name
         self.value = value
         self.unit = unit
-
         self.registered: TRegistered = {"name", "pretty_name", "value", "unit"}
 
     @property
@@ -94,9 +98,11 @@ class Bases(dict):
     #     return get_args(cls.__orig_bases__[0])[1]
 
     def add(self, *args, **kwargs):
-        c = self.inner_class(*args, **kwargs)
+        if isinstance(args[0], self.inner_class):
+            c = args[0]
+        else:
+            c = self.inner_class(*args, **kwargs)
         self[c.name] = c
-        # return self
         return self[c.name]
 
     def __init__(self, *items: Union[T, List[T], Bases, dict]):

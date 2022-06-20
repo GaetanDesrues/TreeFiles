@@ -431,6 +431,11 @@ def logf(fname):
     logging.info(f"Wrote {fname.basename!r} to file://{fname.parent}")
 
 
+def logd(dname):
+    dname = Str(dname)
+    logging.info(f"Directory path: file://{dname}")
+
+
 def breaklines(x: str, k: int = 50, bc: str = "\n"):
     """Will return a copy of the string x with breaklines
     between words if line lenght is greater than k"""

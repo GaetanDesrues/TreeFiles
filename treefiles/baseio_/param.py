@@ -9,13 +9,20 @@ _Bounds = Tuple[TValue, TValue]
 
 class Param(BaseIO):
     def __init__(
-        self, *args, initial_value: TValue = None, bounds: _Bounds = None, **kwargs
+        self,
+        *args,
+        initial_value: TValue = None,
+        bounds: _Bounds = None,
+        ref=None,
+        **kwargs
     ):
         super().__init__(*args, **kwargs)
         self.initial_value = initial_value
         self.bounds = bounds
+        self.ref = ref
 
         self.registered.add("initial_value")
+        self.registered.add("ref")
         self.registered.add("bounds")
 
     @property
@@ -42,13 +49,26 @@ class Param(BaseIO):
 class Params(Bases):
     inner_class = Param  # python < 3.9
 
-    def build_table(self) -> Tuple[Bases.THeader, Bases.TData]:
-        header = ["Name", "Baseline", "Value", "Bounds", "Unit"]
+    def build_table_old(self) -> Tuple[Bases.THeader, Bases.TData]:
+        header = ["Name", "Ref", "Baseline", "Value", "Bounds", "Unit"]
         data = [
-            [x.name, x.initial_value, r(x.value), x.bounds, x.unit]
+            [x.name, r(x.ref), x.initial_value, r(x.value), x.bounds, x.unit]
             for x in self.values()
         ]
         return header, data
+
+    def build_table(self) -> Tuple[Bases.THeader, Bases.TData]:
+        import numpy as np
+
+        header, data = self.build_table_old()
+        datab = np.array([[y is None for y in x] for x in data])
+        hd, dataT = [], []
+        d = np.array(data, dtype=object)
+        for i, h in enumerate(header):
+            if not datab[:, i].all():
+                hd.append(h)
+                dataT.append(d[:, i])
+        return hd, np.array(dataT).T
 
     @property
     def bounds(self):

@@ -113,6 +113,7 @@ from treefiles.commons import (
     dump,
     Timer,
     logf,
+    logd,
     breaklines,
 )
 
