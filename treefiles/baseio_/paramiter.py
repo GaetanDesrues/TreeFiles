@@ -20,7 +20,7 @@ class ParamIter:
     def __init__(
         self,
         *ps: Union[tf.Params, List[tf.Param], tf.Param],
-        defaults: Union[tf.Params, List[tf.Param]] = None,
+        defaults: Union[dict, tf.Params, List[tf.Param]] = None,
         n: int = None,
     ):
         all_p = []

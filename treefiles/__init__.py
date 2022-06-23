@@ -1,4 +1,4 @@
-from treefiles.tree import Tree, jTree, fTree, Str, S, T, TS
+from treefiles.tree import Tree, jTree, fTree, Str, S, T, TS, Container
 from treefiles.decorators import debug, timer
 from treefiles.pdf import PDFMerger
 from treefiles.logs import get_logger, stream_csv_handler, get_csv_logger
@@ -19,7 +19,7 @@ except ImportError:
 
 
 try:
-    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder
+    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder, JsonEncoder
     from treefiles.baseio_.param import Param, Params, TParams
     from treefiles.baseio_.paramiter import (
         ParamIter,

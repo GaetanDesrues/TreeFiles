@@ -1,4 +1,5 @@
 import glob
+import logging
 import os
 import shutil
 from typing import TypeVar, List, Union, Optional, Callable
@@ -407,6 +408,9 @@ class Tree:
     def __truediv__(self, other):
         return self.path(other)
 
+    def ct(self, ct_path, clean=False):
+        return Container(self / ct_path, clean=clean)
+
 
 def jTree(*args) -> T:
     from treefiles.commons import join
@@ -416,6 +420,41 @@ def jTree(*args) -> T:
 
 def fTree(file: str, *args: str, dump: bool = False, clean: bool = False) -> T:
     return Tree.new(file, *args, dump=dump, clean=clean)
+
+
+class Container(Tree):
+    def __init__(self, *a, clean=False, **kw):
+        super().__init__(*a, **kw)
+        self.dump(clean=clean)
+        self.infos = {}
+        fname = os.path.join(self.root / "infos.tree")
+        if os.path.isfile(fname):
+            obj = Tree.from_file(fname)
+            obj.copy_init_(self)
+
+    def __truediv__(self, other):
+        ds = other.split(os.path.sep)
+        if len(ds) == 1 and os.path.splitext(ds[0])[1] == "":
+            raise RuntimeError(
+                "You cannot use '/' for directories in containers, use sep in strings: out / 'smth/fname.p'"
+            )
+        else:
+            o = self
+            for x in ds[:-1]:
+                o = o.dir(x)
+            o.dump()
+            self.infos[ds[-1]] = other
+            o.file(ds[-1])
+        return super().__truediv__(other)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.save()
+
+    def save(self):
+        self.to_file("infos")
 
 
 class Str(str):

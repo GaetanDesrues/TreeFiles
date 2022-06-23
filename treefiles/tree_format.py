@@ -96,7 +96,9 @@ def parse_lines(lines, dirname=None) -> List[Line]:
 def set_parents(lines):
     indents = [x.indent for x in lines]
     assert indents[0] == 0
-    assert indents[1] > 0
+    # assert indents[1] > 0
+    if len(indents) == 1:
+        return
     di = indents[1]
 
     for i, x in enumerate(lines):
