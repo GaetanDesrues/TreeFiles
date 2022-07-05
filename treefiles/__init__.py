@@ -131,3 +131,7 @@ def set_debug(active: bool = True):
 
 def rge(arr):
     return np.min(arr), np.max(arr)
+
+
+def glob(path):
+    return Tree(curDir(path)).glob(basename(path))

@@ -426,11 +426,12 @@ class Container(Tree):
     def __init__(self, *a, clean=False, **kw):
         super().__init__(*a, **kw)
         self.dump(clean=clean)
-        self.infos = {}
+        # self.infos = {}
         fname = os.path.join(self.root / "infos.tree")
         if os.path.isfile(fname):
             obj = Tree.from_file(fname)
             obj.copy_init_(self)
+        self.root = os.path.dirname(fname)
 
     def __truediv__(self, other):
         ds = other.split(os.path.sep)
@@ -443,7 +444,7 @@ class Container(Tree):
             for x in ds[:-1]:
                 o = o.dir(x)
             o.dump()
-            self.infos[ds[-1]] = other
+            # self.infos[ds[-1]] = other
             o.file(ds[-1])
         return super().__truediv__(other)
 
