@@ -117,6 +117,8 @@ from treefiles.commons import (
     breaklines,
     redirect_stdout,
     redirect_stderr,
+    stdout_redirector,
+    stderr_redirector,
 )
 
 
