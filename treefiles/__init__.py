@@ -37,6 +37,13 @@ try:
 except ImportError:
     pass
 
+
+try:
+    from treefiles.dictkeys import print_keys
+except ImportError:
+    pass
+
+
 try:
     import matplotlib.pyplot as plt
 except ImportError:

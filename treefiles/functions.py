@@ -34,7 +34,7 @@ def plot_beta_example():
             axs[0].legend()
 
         # ab = [(1, 5), (3, 5), (5, 5), (15, 15), (3, 3), (10, 3)]
-        ab = [(6, 5), (6, 13), (5, 5)]
+        ab = [(6, 5), (6, 13), (10, 3)]
         for a, b in ab:
             s = f"a={a}, b={b}"
             axs[1].plot(x, beta_(a, b, x), label=s)
