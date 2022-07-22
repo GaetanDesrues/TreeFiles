@@ -4,6 +4,16 @@ from treefiles.commons import get_string
 
 
 def print_keys(dic):
+    """
+    Pretty print the keys of a nested dictionnary (not sorted)
+    dico = {"key1": {"SubKey1": 1234, "SubKey3": [1, 2, 3]}, "Key2": None}
+    tf.print_keys(dico)
+            dict.keys
+            ├── Key2
+            └── key1
+                ├── SubKey1
+                └── SubKey3
+    """
     tree = Tree()
     tree.create_node("dict.keys", "root")
 
