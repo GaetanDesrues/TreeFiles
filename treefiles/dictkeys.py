@@ -29,6 +29,7 @@ def print_keys(dic, with_extra: bool = False, callback: Callable = get_extra):
                 └── SubKey3
 
     'with_extra' can help to display types:
+    from treefiles.dictkeys import get_extra_2
     tf.print_keys(dico, with_extra=True, callback=get_extra_2)
             dict.keys
             ├── Key2: NoneType
