@@ -72,7 +72,7 @@ def dump_yaml(fname: str, data, **kwargs):
         f.write(yaml.dump(data, **kwargs))
 
 
-def load_json(filename: str, force_ext: bool = True, **kwargs):
+def load_json(filename: str, force_ext: bool = True, munch: bool = False, **kwargs):
     """Loads a json file with `json.load`
 
     :return: dict
@@ -80,7 +80,12 @@ def load_json(filename: str, force_ext: bool = True, **kwargs):
     if force_ext:
         filename = ensure_ext(filename, "json")
     with open(filename, "r") as f:
-        return json.load(f, **kwargs)
+        if munch:
+            from munch import munchify
+
+            return munchify(json.load(f, **kwargs))
+        else:
+            return json.load(f, **kwargs)
 
 
 def dump_json(filename: str, data, force_ext: bool = True, **kwargs):
@@ -378,7 +383,6 @@ class no_stdout:
         if self.enable:
             sys.stdout.close()
             sys.stdout = self.old_target
-
 
 
 libc = ctypes.CDLL(None)

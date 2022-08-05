@@ -324,6 +324,12 @@ class Tree:
         lines, fname = get_lines(*args, ensure_ext=ensure_ext)
         return cls.from_str(lines, fname=fname, **envs)
 
+    @classmethod
+    def from_dir(cls, path, **kw):
+        g = path.glob("*.tree")
+        if len(g) > 0:
+            return cls.from_file(g[0], **kw)
+
     def to_file(self, *args: str, ensure_ext: bool = True, **pp_kws):
         fname = args[0]  # Default
 

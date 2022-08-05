@@ -12,6 +12,13 @@ from treefiles.poolception import NestablePool
 
 f = fTree
 
+
+def F(*a, **kw) -> S:
+    """Creates a filename <Str> while dumping the parent dir"""
+    obj = f(*a, **kw)
+    return obj.p.dump() / obj.basename
+
+
 try:
     from munch import munchify
 except ImportError:
