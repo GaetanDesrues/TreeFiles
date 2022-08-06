@@ -8,6 +8,27 @@ _Bounds = Tuple[TValue, TValue]
 
 
 class Param(BaseIO):
+    """
+    A ``Param`` is a dictionary that contains a fixed set of keys, defined in ``self.registered``:
+        - name (required)
+        - value
+        - pretty_name
+        - unit
+        - initial_value
+        - ref
+        - bounds
+    
+    .. code-block:: python
+        
+        >>> param = Param("some_param", 10)
+        >>> param
+        <Param.some_param=10>
+        >>> param.value  # get value
+        10
+        >>> param(-7)  # assign value
+        <Param.some_param=-7>
+        
+    """
     def __init__(
         self,
         *args,
