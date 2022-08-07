@@ -532,9 +532,14 @@ def dump(dst: TS, clean: bool = False) -> T:
 
 class Timer:
     """
-    with Timer() as t:
-        time.sleep(1.46)
-    print(t.secs)  # 1.460746487020515
+    Basic timer with context
+
+    .. code-block::
+
+        with Timer() as t:
+            time.sleep(1.46)
+        print(t.secs)  # 1.460746487020515
+
     """
 
     def __enter__(self):
