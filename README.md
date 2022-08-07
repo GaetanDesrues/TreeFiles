@@ -2,7 +2,7 @@
 
 ### A sympathic way of dealing with filenames, and more...
 
-Documentation: [here](https://www-sop.inria.fr/members/Gaetan.Desrues/treefiles/).
+Documentation: [here](https://treefiles.doc.kerga.fr).
 
 ```python
 import treefiles as tf
