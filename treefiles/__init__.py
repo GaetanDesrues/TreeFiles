@@ -153,3 +153,6 @@ def rge(arr):
 
 def glob(path):
     return Tree(curDir(path)).glob(basename(path))
+
+
+EDSTIC = "#006a9b"

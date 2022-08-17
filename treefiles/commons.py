@@ -144,7 +144,7 @@ def move(arg: str, dest: str):
     """Move files in glob `arg` to `dest` with `shutil.move`"""
     for f in glob.glob(arg):
         removeIfExists(join(dest, os.path.basename(f)))
-        shutil.move(f, dest)
+        shutil.move(f, Str(dest))
 
 
 def copyfile(arg: str, dest: TS):

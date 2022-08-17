@@ -446,6 +446,9 @@ class Container(Tree):
                 "You cannot use '/' for directories in containers, use sep in strings: out / 'smth/fname.p'"
             )
         else:
+            aze = os.path.splitext(ds[-1])[0]
+            if hasattr(self, aze) and getattr(self, aze) == self.path(other):
+                return super().__truediv__(other)
             o = self
             for x in ds[:-1]:
                 o = o.dir(x)
