@@ -17,9 +17,9 @@ class Param(BaseIO):
         - initial_value
         - ref
         - bounds
-    
+
     .. code-block:: python
-        
+
         >>> param = Param("some_param", 10)
         >>> param
         <Param.some_param=10>
@@ -27,8 +27,9 @@ class Param(BaseIO):
         10
         >>> param(-7)  # assign value
         <Param.some_param=-7>
-        
+
     """
+
     def __init__(
         self,
         *args,
@@ -100,10 +101,11 @@ class Params(Bases):
         return cls([cls.inner_class(k, v) for k, v in d.items()])
 
 
-def r(x, k=2):
+def r(x):
     if x is None:
         return
     try:
+        k = 3 if x > 1e3 else 6
         y = round(x, k)
     except:
         y = x

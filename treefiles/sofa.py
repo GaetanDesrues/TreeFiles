@@ -1,8 +1,10 @@
 import logging
 import os
 import subprocess
+from typing import List
 
 from treefiles import timer
+from treefiles.commons import get_iterable
 
 
 class Viewer:
@@ -22,6 +24,7 @@ def run_sofa(
     run: bool = True,
     build_j: int = 6,
     dry_run: bool = False,
+    plugins: List[str] = None,
 ):
     """
     Utilities for compiling and running a SOFA scene.
@@ -36,6 +39,7 @@ def run_sofa(
     :param run: if execution is enabled
     :param build_j: number of cores for compilation
     :param dry_run: will not actually call runSofa
+    :param plugins: load given plugins (from https://www.sofa-framework.org/community/doc/using-sofa/runsofa/#launch-runsofa)
     """
     sofa_timer_args = [
         "--computationTimeSampling",  # Frequency of display of the computation time statistics, in number of animation steps.
@@ -84,6 +88,9 @@ def run_sofa(
             if timer_occur > 0:
                 args.extend(sofa_timer_args)
 
+            if plugins is not None:
+                args.extend(["--load", *plugins])
+
             if std_to_file:
                 out = os.path.join(os.path.dirname(scene_path), "Output_Python.stdout")
                 err = os.path.join(os.path.dirname(scene_path), "Error_Python.stderr")
@@ -92,7 +99,9 @@ def run_sofa(
                     with open(out, "w") as stdout:
                         with open(err, "w") as stderr:
                             subprocess.call(
-                                args, stdout=stdout, stderr=stderr,
+                                args,
+                                stdout=stdout,
+                                stderr=stderr,
                             )
             else:
                 log.debug(f"Calling '{' '.join(args)}'")

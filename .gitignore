@@ -5,3 +5,6 @@ __pycache__/
 .idea/
 venv
 /debug.py
+/examples/ct-01/arr.npy
+/examples/ct-01/infos.tree
+/examples/first_container/infos.tree
