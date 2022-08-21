@@ -8,6 +8,7 @@ from treefiles.tables import Table
 from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
+from treefiles.ctxman import timeout
 
 
 f = fTree
@@ -47,8 +48,8 @@ except ImportError:
 
 try:
     from treefiles.dictkeys import print_keys
-except ImportError:
-    pass
+except ImportError as e:
+    print(f"ERROR: {e}")
 
 
 try:

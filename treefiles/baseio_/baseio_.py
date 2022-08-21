@@ -85,12 +85,15 @@ class IOEncoder(NumpyEncoder):
             return obj.to_dict()
         return super().default(obj)
 
+
 class JsonEncoder(IOEncoder):
     """General purpose encode"""
+
     def default(self, obj):
         if dataclasses.is_dataclass(obj):
             return dataclasses.asdict(obj)
         return super().default(obj)
+
 
 # class Bases(Dict[str, BaseIO]):  # python >= 3.9
 class Bases(dict):
