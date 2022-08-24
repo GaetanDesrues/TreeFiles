@@ -1,3 +1,5 @@
+import os
+
 from treefiles.tree import Tree, jTree, fTree, Str, S, T, TS, Container
 from treefiles.decorators import debug, timer
 from treefiles.pdf import PDFMerger
@@ -14,10 +16,19 @@ from treefiles.ctxman import timeout
 f = fTree
 
 
-def F(*a, **kw) -> S:
-    """Creates a filename <Str> while dumping the parent dir"""
-    obj = f(*a, **kw)
-    return obj.p.dump() / obj.basename
+# def F(*a, **kw) -> S:
+#     """Creates a filename <Str> while dumping the parent dir"""
+#     obj = f(*a, **kw)
+#     return obj.p.dump() / obj.basename
+def file(fname: str):
+    return Str(fname).parent.dump() / Str(fname).basename
+
+
+def env(k: str, d: str = None):
+    r = os.environ.get(k, d)
+    if r is None:
+        raise KeyError(f"Environment variable {k!r} not found")
+    return Str(r)
 
 
 try:

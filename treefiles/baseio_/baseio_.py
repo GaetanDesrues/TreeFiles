@@ -176,6 +176,10 @@ class Bases(dict):
                         items = x
         super().__init__({k.name: k for k in items})
 
+    @classmethod
+    def from_dict(cls, d):
+        return cls([cls.inner_class(k, v) for k, v in d.items()])
+
     @property
     def elems(self) -> List[T]:
         return list(self.values())
