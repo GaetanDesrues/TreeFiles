@@ -32,6 +32,17 @@ def env(k: str, d: str = None):
 
 
 try:
+    from dotenv import load_dotenv
+except:
+    print("dotenv not found, cannot define 'fenv' -> pip install python-dotenv")
+else:
+
+    def fenv(file: str, k: str):
+        load_dotenv(f(file) / ".env")
+        return env(k)
+
+
+try:
     from munch import munchify
 except ImportError:
     pass
