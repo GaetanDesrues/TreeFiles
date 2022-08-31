@@ -1,7 +1,9 @@
 import glob
 import logging
 import os
+import re
 import shutil
+from dataclasses import dataclass
 from typing import TypeVar, List, Union, Optional, Callable
 
 from treefiles.tree_format import parse_lines, set_parents, get_lines
@@ -467,6 +469,17 @@ class Container(Tree):
         self.to_file("infos")
 
 
+@dataclass
+class StrReResult:
+    idx: int
+    preffix: str
+    match: str
+    suffix: str
+
+    def __truediv__(self, other) -> "Str":
+        return Str(self.preffix + self.match + self.suffix) / other
+
+
 class Str(str):
     def __new__(cls, value):
         if isinstance(value, Tree):
@@ -503,3 +516,9 @@ class Str(str):
 
     def glob(self, pattern: str) -> List[S]:
         return Tree(self).glob(pattern)
+
+    def re(self, pat) -> StrReResult:
+        m = re.search(rf"(.+)?{pat}_(\d+)(.+)?", self)
+        if m:
+            a, b, c = m[1], f"{pat}_{m[2]}", m[3]
+            return StrReResult(m[2], a, b, c)

@@ -1,1 +1,14 @@
-twine
+keyring
+matplotlib
+MeshObject
+munch
+numpy
+PyPDF2
+python-dotenv
+pyvista
+PyYAML
+scipy
+setuptools
+smt
+tqdm
+treelib
