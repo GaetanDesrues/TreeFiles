@@ -179,3 +179,7 @@ def glob(path):
 
 
 EDSTIC = "#006a9b"
+
+
+def expanduser(a="~"):
+    return Str(os.path.expanduser(a))
