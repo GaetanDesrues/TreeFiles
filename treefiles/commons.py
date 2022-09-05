@@ -93,9 +93,12 @@ def dump_json(filename: str, data, force_ext: bool = True, **kwargs):
 
     :param data: dict
     """
+    from treefiles.jsonencoder import JsonEncoder
+
     if force_ext:
         filename = ensure_ext(filename, "json")
-    kwargs["indent"] = kwargs.get("indent", 4)
+    kwargs.setdefault("indent", 4)
+    kwargs.setdefault("cls", JsonEncoder)
     with open(filename, "w") as f:
         json.dump(data, f, **kwargs)
 
