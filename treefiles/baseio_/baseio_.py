@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import dataclasses
 import inspect
 import logging
 from copy import deepcopy
 from typing import Union, TypeVar, Set, List, Tuple
 
 import numpy as np
+
 from treefiles.commons import get_iterable
 from treefiles.np import NumpyEncoder
 from treefiles.tables import Table
@@ -83,15 +83,6 @@ class IOEncoder(NumpyEncoder):
     def default(self, obj):
         if isinstance(obj, BaseIO):
             return obj.to_dict()
-        return super().default(obj)
-
-
-class JsonEncoder(IOEncoder):
-    """General purpose encode"""
-
-    def default(self, obj):
-        if dataclasses.is_dataclass(obj):
-            return dataclasses.asdict(obj)
         return super().default(obj)
 
 

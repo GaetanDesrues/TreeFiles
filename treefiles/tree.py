@@ -521,4 +521,4 @@ class Str(str):
         m = re.search(rf"(.+)?{pat}_(\d+)(.+)?", self)
         if m:
             a, b, c = m[1], f"{pat}_{m[2]}", m[3]
-            return StrReResult(m[2], a, b, c)
+            return StrReResult(int(m[2]), a, b, c)

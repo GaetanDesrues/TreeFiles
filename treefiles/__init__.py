@@ -11,7 +11,7 @@ from treefiles.sofa import Viewer, run_sofa
 from treefiles.mails import send_mail, register_treemails
 from treefiles.poolception import NestablePool
 from treefiles.ctxman import timeout
-
+from treefiles.jsonencoder import JsonEncoder
 
 f = fTree
 
@@ -49,7 +49,7 @@ except ImportError:
 
 
 try:
-    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder, JsonEncoder
+    from treefiles.baseio_.baseio_ import TValue, BaseIO, Bases, IOEncoder
     from treefiles.baseio_.param import Param, Params, TParams
     from treefiles.baseio_.paramiter import (
         ParamIter,
