@@ -44,6 +44,7 @@ else:
 
 try:
     from munch import munchify
+    from treefiles.dictops import analyse, query
 except ImportError:
     pass
 
