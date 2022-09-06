@@ -517,6 +517,9 @@ class Str(str):
     def glob(self, pattern: str) -> List[S]:
         return Tree(self).glob(pattern)
 
+    def dump(self) -> Tree:
+        return Tree(self).dump()
+
     def re(self, pat) -> StrReResult:
         m = re.search(rf"(.+)?{pat}_(\d+)(.+)?", self)
         if m:
