@@ -24,6 +24,10 @@ def query(d, **kw):
                 break
         if cond:
             xkeep.append(x)
+    if len(xkeep) == 1:
+        from munch import munchify
+
+        return munchify(xkeep[0])
     return xkeep
 
 
