@@ -38,7 +38,10 @@ except:
 else:
 
     def fenv(file: str, k: str):
-        load_dotenv(f(file) / ".env")
+        file = Str(file)
+        if file.endswith(".py"):
+            file = f(file)
+        load_dotenv(file / ".env")
         return env(k)
 
 
