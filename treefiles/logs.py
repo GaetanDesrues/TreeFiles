@@ -1,5 +1,7 @@
 import logging
+import os
 import sys
+from logging.handlers import RotatingFileHandler
 from typing import List
 
 
@@ -95,6 +97,7 @@ def get_logger(
     default=True,
     handlers: List[logging.Handler] = None,
     origin: bool = True,
+    logfile: str = None,
 ):
     """
     Format the root logger to remove default handlers and add a default `StreamHandler` with custom formatter `SimpleFormatter`.
@@ -122,6 +125,13 @@ def get_logger(
     if handlers is not None:
         for x in handlers:
             logger.addHandler(x)
+
+    if logfile:
+        if logfile.endswith(".py"):
+            logfile = logfile[:-3] + ".log"
+        x = RotatingFileHandler(logfile, maxBytes=int(1e6), backupCount=5)  # 5 Mo max
+        x.setFormatter(CSVFormatter())
+        logger.addHandler(x)
 
     return logger
 
