@@ -31,6 +31,18 @@ def env(k: str, d: str = None):
     return Str(r)
 
 
+from munch import munchify, Munch
+from treefiles.dictops import analyse, query
+
+
+def make_string(**kw):
+    return "&".join([f"{k}={v}" for k, v in kw.items()])
+
+
+def decode_string(s) -> Munch:
+    return munchify({x.split("=")[0]: x.split("=")[1] for x in s.split("&")})
+
+
 try:
     from dotenv import load_dotenv
 except:
@@ -43,13 +55,6 @@ else:
             file = f(file)
         load_dotenv(file / ".env")
         return env(k)
-
-
-try:
-    from munch import munchify
-    from treefiles.dictops import analyse, query
-except ImportError:
-    pass
 
 
 try:
