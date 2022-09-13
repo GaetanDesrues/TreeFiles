@@ -328,6 +328,25 @@ def ensure_ext(fname: str, ext: str) -> S:
     return Str(fname)
 
 
+class redirect_std:
+    """
+    Usage:
+        with tf.redirect_std(fname: str):
+            ...
+    """
+
+    def __init__(self, fname: str):
+        self.old_targets = sys.stdout, sys.stderr
+        sys.stdout = sys.stderr = open(fname, "w")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout, sys.stderr = self.old_targets
+
+
 class redirect_stdout:
     """
     Usage:

@@ -164,6 +164,7 @@ from treefiles.commons import (
     breaklines,
     redirect_stdout,
     redirect_stderr,
+    redirect_std,
     stdout_redirector,
     stderr_redirector,
 )
