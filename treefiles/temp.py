@@ -17,11 +17,12 @@ def tmp_():
 
 
 class TmpDir:
-    def __init__(self, root=tempfile.gettempdir()):
+    def __init__(self, root=tempfile.gettempdir(), k=8):
         self.root = tf.Tree(root)
+        self.k = k
 
     def find_new(self):
-        new_name = self.root.path(rand())
+        new_name = self.root.path(rand(k=self.k))
         if tf.isDir(new_name):
             return self.find_new()
         else:
