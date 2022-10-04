@@ -6,6 +6,7 @@ import io
 import json
 import logging
 import os
+import pickle
 import random
 import re
 import shutil
@@ -15,7 +16,7 @@ import tempfile
 import time
 from contextlib import contextmanager
 from os.path import join, isfile, basename, isdir
-from typing import List, Union
+from typing import List, Union, Any
 from zipfile import ZipFile
 
 from treefiles.tree import Tree, Str, S, T, TS
@@ -114,6 +115,16 @@ def dump_str(filename: str, data):
     with open(filename, "w") as f:
         f.write(str(data))  # .encode("utf-8")
 
+def load_pickle(filename: str) -> Any:
+    """Loads a pickle file"""
+    with open(filename, "rb") as f:
+        return pickle.load(f)
+
+
+def dump_pickle(filename: str, data):
+    """Dumps object to pickle file"""
+    with open(filename, "wb") as f:
+        pickle.dump(data, f)
 
 def pprint_json(data: dict):
     """Returns a pretty printed dict"""

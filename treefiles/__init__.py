@@ -167,6 +167,8 @@ from treefiles.commons import (
     redirect_std,
     stdout_redirector,
     stderr_redirector,
+    load_pickle,
+    dump_pickle,
 )
 
 
