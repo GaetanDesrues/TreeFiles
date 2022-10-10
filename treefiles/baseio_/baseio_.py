@@ -228,6 +228,13 @@ class Bases(dict):
         else:
             super().__setattr__(key, value)
 
+    def merge(self, d: dict):
+        for k, v in d.items():
+            if k in self:
+                self[k](v)
+            else:
+                self.add(k, v)
+
 
 T = TypeVar("T", bound=BaseIO)
 TBases = TypeVar("TBases", bound=Bases)
